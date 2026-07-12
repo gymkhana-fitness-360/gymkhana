@@ -19,13 +19,17 @@ Thank you for your interest in Fitness360. Contributions are welcome under the [
 
 ## Pull requests
 
-1. Fork the repository and create a branch from `main` (`feat/…`, `fix/…`, or `docs/…`).
+**`main` is protected** — all changes must go through a pull request. Direct pushes to `main` are rejected by GitHub (see [docs/BRANCH_POLICY.md](docs/BRANCH_POLICY.md)).
+
+1. Fork or branch from `main` (`feat/…`, `fix/…`, or `docs/…`).
 2. Keep each PR **focused** — one bug, feature, or doc change when possible.
 3. **Keep `main` production-ready** — experimental prototypes and internal AI/WIP docs belong on feature branches, not `main`.
-4. Follow the [development guide](docs/DEVELOPMENT.md) for setup, conventions, and CI checks.
-5. For releases: see [docs/RELEASES.md](docs/RELEASES.md) and update [CHANGELOG.md](CHANGELOG.md) when shipping user-visible changes.
-6. Fill in the [pull request template](.github/pull_request_template.md).
-7. Ensure CI passes before requesting review.
+4. Wait for **required CI checks** before merging.
+5. Follow the [development guide](docs/DEVELOPMENT.md) for setup, conventions, and local checks.
+6. For releases: see [docs/RELEASES.md](docs/RELEASES.md) and update [CHANGELOG.md](CHANGELOG.md) when shipping user-visible changes.
+7. Fill in the [pull request template](.github/pull_request_template.md).
+
+Optional local guard: `./scripts/install-git-hooks.sh` (blocks accidental `git push origin main`).
 
 ### Commit messages (public-friendly)
 
