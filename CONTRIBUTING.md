@@ -6,7 +6,7 @@ Thank you for your interest in Fitness360. Contributions are welcome under the [
 
 1. **Search [existing issues](https://github.com/gymkhana-fitness-360/gymkhana/issues)** — avoid duplicate work.
 2. **Open an issue first** for large features or architectural changes so maintainers can align on approach.
-3. **Read the scope** — this repo is the open-source **product app** (dashboard, API, self-host). Marketing, playground, and commercial control-plane code live in the private Gymkhana cloud repo, not here.
+3. **Read the scope** — this repo is the open-source **product app** only. See [docs/OPEN_CORE.md](docs/OPEN_CORE.md).
 
 ## How to contribute
 

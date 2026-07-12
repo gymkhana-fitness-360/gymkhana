@@ -63,6 +63,7 @@ Any Node host with PostgreSQL works (Vercel, Railway, self-hosted).
 |-----|---------|
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to file issues and open PRs |
 | [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Local setup, conventions, CI |
+| [docs/OPEN_CORE.md](docs/OPEN_CORE.md) | What is / isn't in this public repo |
 | [docs/adr/](docs/adr/) | Architecture decision records |
 | [skills/](skills/) | Agent dev skill (`/dev-*` workflows) |
 | [openapi/openapi.json](openapi/openapi.json) | HTTP API (`npm run openapi:generate`) |
