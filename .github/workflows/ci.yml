@@ -30,6 +30,7 @@ jobs:
         run: npx prisma generate
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
 
       - name: Lint
         run: npm run lint
@@ -50,17 +51,20 @@ jobs:
         run: npm run test:ci
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
           CRON_SECRET: ci-placeholder-cron-secret
 
       - name: Typecheck
         run: npx tsc --noEmit
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
 
       - name: Build
         run: npm run build
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
           NEXTAUTH_SECRET: ci-placeholder-secret-for-build-only-min-32-chars!!
           NEXTAUTH_URL: http://localhost:3000
 
@@ -92,10 +96,12 @@ jobs:
         run: npx prisma generate
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
+          DIRECT_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
       - name: Apply migrations
         run: npx prisma migrate deploy
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
+          DIRECT_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
       - name: Validate Prisma schema
         run: npx prisma validate
 
@@ -127,12 +133,14 @@ jobs:
         run: npx prisma generate
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
       - name: Install Playwright
         run: npx playwright install --with-deps chromium
       - name: Build
         run: npm run build
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
           NEXTAUTH_SECRET: ci-placeholder-secret-for-build-only-min-32-chars!!
           NEXTAUTH_URL: http://localhost:3000
       - name: E2E smoke
