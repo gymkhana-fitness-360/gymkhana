@@ -71,6 +71,9 @@ jobs:
   prisma-migrate:
     name: Prisma migrate check
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
+      DIRECT_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
     services:
       postgres:
         image: postgres:16
