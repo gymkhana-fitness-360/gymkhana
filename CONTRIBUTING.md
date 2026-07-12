@@ -19,11 +19,22 @@ Thank you for your interest in Fitness360. Contributions are welcome under the [
 
 ## Pull requests
 
-1. Fork the repository and create a branch from `main`.
+1. Fork the repository and create a branch from `main` (`feat/…`, `fix/…`, or `docs/…`).
 2. Keep each PR **focused** — one bug, feature, or doc change when possible.
-3. Follow the [development guide](docs/DEVELOPMENT.md) for setup, conventions, and CI checks.
-4. Fill in the [pull request template](.github/pull_request_template.md).
-5. Ensure CI passes before requesting review.
+3. **Keep `main` production-ready** — experimental prototypes and internal AI/WIP docs belong on feature branches, not `main`.
+4. Follow the [development guide](docs/DEVELOPMENT.md) for setup, conventions, and CI checks.
+5. Fill in the [pull request template](.github/pull_request_template.md).
+6. Ensure CI passes before requesting review.
+
+### Commit messages (public-friendly)
+
+Use clear, complete sentences. Good examples:
+
+- `fix: correct renewal date when timezone is IST`
+- `docs: document self-host env vars in DEVELOPMENT.md`
+- `feat(api): add pagination to GET /api/v1/members`
+
+Avoid internal codenames, ticket dumps, or `WIP` / `temp` on commits that will land on `main`.
 
 Maintainers may ask for changes, squash commits, or close PRs that are out of scope.
 
