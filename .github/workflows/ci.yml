@@ -43,6 +43,9 @@ jobs:
       - name: Generate OpenAPI spec
         run: npm run openapi:generate
 
+      - name: OpenAPI freshness
+        run: npm run openapi:check
+
       - name: Unit tests
         run: npm run test:ci
         env:
@@ -64,6 +67,20 @@ jobs:
   prisma-migrate:
     name: Prisma migrate check
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: gymkhana_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -74,11 +91,11 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
         env:
-          DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
       - name: Validate migration history
-        run: npx prisma migrate diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --exit-code
+        run: npx prisma migrate diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --shadow-database-url postgresql://postgres:postgres@localhost:5432/gymkhana_ci_shadow --exit-code
         env:
-          DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
 
   api-audit:
     name: API route audit freshness
@@ -122,4 +139,6 @@ jobs:
           CI: "true"
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
           NEXTAUTH_SECRET: ci-placeholder-secret-for-build-only-min-32-chars!!
-          NEXTAUTH_URL: http://localhost:3000
+          NEXTAUTH_URL: https://localhost:3000
+          CRON_SECRET: ci-placeholder-cron-secret-min-32-chars!!
+          ALLOW_DEMO_ACCOUNT_AUTO_LINK: "false"

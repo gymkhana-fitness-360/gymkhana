@@ -57,6 +57,7 @@
     "audit:route-line-limit": "node scripts/check-route-line-limit.mjs",
     "audit:mutating-zod": "node scripts/check-mutating-routes-zod.mjs",
     "openapi:generate": "node scripts/generate-openapi.mjs",
+    "openapi:check": "node scripts/check-openapi-fresh.mjs",
     "test:e2e:smoke": "playwright test e2e/login.spec.ts e2e/dashboard.spec.ts e2e/renewals-chase.spec.ts",
     "validate:business-rules": "tsx scripts/check-crud-business-rules.ts",
     "deploy": "./scripts/check-file-updates.sh && vercel --prod",

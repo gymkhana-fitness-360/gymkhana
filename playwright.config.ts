@@ -27,8 +27,8 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     env: {
       ...process.env,
-      // Matches local .env.example: login auto-links orphan users to demo tenant for E2E.
-      ALLOW_DEMO_ACCOUNT_AUTO_LINK: 'true',
+      // Local dev only — production `next start` (CI) must not enable demo auto-link.
+      ...(process.env.CI ? {} : { ALLOW_DEMO_ACCOUNT_AUTO_LINK: "true" }),
     },
   },
 });
