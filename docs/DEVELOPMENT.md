@@ -29,7 +29,7 @@ prisma/          → schema and migrations
 
 Architecture overview: [docs/adr/001-modular-monolith-first.md](adr/001-modular-monolith-first.md)
 
-Agent skill (Cursor / Claude): [`skills/`](../skills/) — `npx skills add gymkhana-fitness-360/gymkhana@dev -y`
+Agent skill (Cursor / Claude): [gymkhana-skills](https://github.com/gymkhana-fitness-360/gymkhana-skills) — `npx skills add gymkhana-fitness-360/gymkhana-skills@dev -y`
 
 ## Conventions
 

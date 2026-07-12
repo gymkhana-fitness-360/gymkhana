@@ -65,7 +65,7 @@ Any Node host with PostgreSQL works (Vercel, Railway, self-hosted).
 | [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Local setup, conventions, CI |
 | [docs/OPEN_CORE.md](docs/OPEN_CORE.md) | What is / isn't in this public repo |
 | [docs/adr/](docs/adr/) | Architecture decision records |
-| [skills/](skills/) | Agent dev skill (`/dev-*` workflows) |
+| [gymkhana-skills](https://github.com/gymkhana-fitness-360/gymkhana-skills) | Agent dev skill — `npx skills add gymkhana-fitness-360/gymkhana-skills@dev -y` |
 | [openapi/openapi.json](openapi/openapi.json) | HTTP API (`npm run openapi:generate`) |
 
 ## License
