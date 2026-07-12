@@ -19,6 +19,8 @@ Marketing (`www.gymkhana.fit`), interactive playground, developers portal, and t
 
 If you link to an external marketing site, set `NEXT_PUBLIC_MARKETING_SITE_URL` (see `.env.example`).
 
+Integrator API reference and MCP are published at **`/developers`** on the marketing site (`gymkhana-cloud`). Operator help for gym owners belongs in **product** (in-app `/dashboard/help` when built).
+
 ## Related
 
 - [CONTRIBUTING.md](../CONTRIBUTING.md) — contribution process
