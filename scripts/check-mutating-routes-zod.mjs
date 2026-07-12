@@ -4,6 +4,19 @@ import fs from "node:fs";
 import path from "node:path";
 
 const apiDir = path.join(import.meta.dirname, "..", "src/app/api");
+const allowlist = new Set([
+  // Cron: CRON_SECRET auth, not JSON body
+  "src/app/api/cron/daily-overdue-report/route.ts",
+  // Multipart upload
+  "src/app/api/members/photo/route.ts",
+  // MCP JSON-RPC — validated in domain layer
+  "src/app/api/mcp/route.ts",
+  // OAuth form body
+  "src/app/api/oauth/token/route.ts",
+  // Agent client token rotation
+  "src/app/api/settings/agent-clients/[clientId]/token/route.ts",
+]);
+
 const hints = [
   "z.object",
   "parseValidatedBody",
@@ -31,6 +44,8 @@ function walk(dir, files = []) {
 
 const missing = [];
 for (const file of walk(apiDir)) {
+  const rel = path.relative(path.join(import.meta.dirname, ".."), file);
+  if (allowlist.has(rel)) continue;
   const text = fs.readFileSync(file, "utf8");
   if (!/export async function (POST|PUT|PATCH)\b/.test(text)) continue;
   if (hints.some((h) => text.includes(h))) continue;

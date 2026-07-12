@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
@@ -7,6 +8,8 @@ import {
 } from "@/lib/gym-scope";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
 import { ApiErrors } from "@/lib/api-handler";
+
+const markReadSchema = z.object({ id: z.string().min(1) });
 
 export async function GET(request: NextRequest) {
   const rl = withRateLimit(request, "lenient");
@@ -43,8 +46,9 @@ export async function PATCH(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) return ApiErrors.unauthorized();
 
-  const { id } = await request.json().catch(() => ({}));
-  if (!id) return ApiErrors.validationError("id required");
+  const parsed = markReadSchema.safeParse(await request.json().catch(() => ({})));
+  if (!parsed.success) return ApiErrors.validationError("id required");
+  const { id } = parsed.data;
 
   await prisma.staffNotification.updateMany({
     where: { id, userId: session.user.id },

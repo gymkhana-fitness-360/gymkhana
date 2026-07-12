@@ -92,6 +92,8 @@ jobs:
         run: npx prisma generate
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
+      - name: Prepare shadow database
+        run: PGPASSWORD=postgres createdb -h localhost -U postgres gymkhana_ci_shadow || true
       - name: Validate migration history
         run: npx prisma migrate diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --shadow-database-url postgresql://postgres:postgres@localhost:5432/gymkhana_ci_shadow --exit-code
         env:
