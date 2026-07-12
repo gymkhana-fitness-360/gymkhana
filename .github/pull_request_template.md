@@ -15,6 +15,8 @@ Closes #
 
 ## Checklist
 
+- [ ] **CodeRabbit review** complete (or maintainer review) — see [docs/PR_REVIEW.md](docs/PR_REVIEW.md)
+- [ ] Review feedback addressed; **all conversations resolved**
 - [ ] `npm run typecheck` passes
 - [ ] `npm run lint` passes
 - [ ] `npm run test:ci` passes

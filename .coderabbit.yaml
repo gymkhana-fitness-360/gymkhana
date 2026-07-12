@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# AI PR reviews — install: https://github.com/apps/coderabbitai
+# Docs: docs/PR_REVIEW.md
+
+language: en-US
+
+reviews:
+  profile: chill
+  high_level_summary: true
+  poem: false
+  request_changes_workflow: false
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+  path_filters:
+    - "!**/package-lock.json"
+    - "!**/pnpm-lock.yaml"
+    - "!**/openapi/openapi.json"
+  path_instructions:
+    - path: "src/app/api/**"
+      instructions: |
+        API route handlers must stay thin (<~80 lines). Business logic belongs in
+        src/domains/ with Prisma in adapters only — not direct @/lib/prisma in routes.
+        Every tenant query must filter by gymId. Flag security/auth gaps.
+    - path: "src/domains/**"
+      instructions: |
+        Domain handlers and adapters for gym management (members, payments, attendance,
+        billing, WhatsApp). Prefer explicit business rules over silent fallbacks.
+    - path: "prisma/**"
+      instructions: |
+        Schema changes need migrations. Check tenant scoping on new models (gymId FK).
+    - path: "docs/**"
+      instructions: |
+        Docs are audience-specific: operators (product), integrators (developers portal
+        in gymkhana-cloud), contributors (CONTRIBUTING, ADRs).
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "CONTRIBUTING.md"
+      - "docs/DEVELOPMENT.md"
+      - "docs/BRANCH_POLICY.md"
+      - "docs/adr/**"

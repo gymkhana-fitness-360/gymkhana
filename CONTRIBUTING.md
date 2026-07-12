@@ -24,10 +24,11 @@ Thank you for your interest in Fitness360. Contributions are welcome under the [
 1. Fork or branch from `main` (`feat/…`, `fix/…`, or `docs/…`).
 2. Keep each PR **focused** — one bug, feature, or doc change when possible.
 3. **Keep `main` production-ready** — experimental prototypes and internal AI/WIP docs belong on feature branches, not `main`.
-4. Wait for **required CI checks** before merging.
-5. Follow the [development guide](docs/DEVELOPMENT.md) for setup, conventions, and local checks.
+4. Wait for **CodeRabbit AI review** and resolve all conversations before merging — see [docs/PR_REVIEW.md](docs/PR_REVIEW.md).
+5. Ensure **CI passes** on the PR (when required checks are enabled).
 6. For releases: see [docs/RELEASES.md](docs/RELEASES.md) and update [CHANGELOG.md](CHANGELOG.md) when shipping user-visible changes.
-7. Fill in the [pull request template](.github/pull_request_template.md).
+7. Follow the [development guide](docs/DEVELOPMENT.md) for setup, conventions, and local checks.
+8. Fill in the [pull request template](.github/pull_request_template.md).
 
 Optional local guard: `./scripts/install-git-hooks.sh` (blocks accidental `git push origin main`).
 
