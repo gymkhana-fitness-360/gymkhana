@@ -2,7 +2,17 @@
 
 import { useState, useEffect } from "react";
 
-const DEFAULT_REPO = "fitness360/fitness360";
+const DEFAULT_REPO = (() => {
+  const raw = process.env.NEXT_PUBLIC_GITHUB_URL?.trim();
+  if (raw) {
+    try {
+      return new URL(raw).pathname.replace(/^\//, "").replace(/\/$/, "");
+    } catch {
+      /* fall through */
+    }
+  }
+  return "gymkhana-fitness-360/gymkhana";
+})();
 
 export function formatGitHubStars(count: number): string {
   if (count < 1000) return String(count);
