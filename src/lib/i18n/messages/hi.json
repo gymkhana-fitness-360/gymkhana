@@ -1,0 +1,21 @@
+{
+  "nav.dashboard": "डैशबोर्ड",
+  "nav.members": "सदस्य",
+  "nav.classes": "कक्षाएँ",
+  "nav.marketplace": "मार्केटप्लेस",
+  "nav.pricing": "मूल्य",
+  "member.home.title": "मेरा जिम",
+  "member.home.membership": "सदस्यता",
+  "member.home.bookClass": "कक्षा बुक करें",
+  "member.home.payDues": "फीस भुगतान",
+  "member.classes.title": "कक्षा समय सारिणी",
+  "member.pay.title": "सदस्यता शुल्क भुगतान",
+  "pricing.title": "भारतीय जिम के लिए सरल मूल्य",
+  "pricing.subtitle": "INR योजनाएँ — कोई छुपी फीस नहीं। मुफ्त शुरू करें, बढ़ने पर अपग्रेड करें।",
+  "pricing.feature.languages": "हिन्दी और बंगाली UI",
+  "pricing.cta.getStarted": "शुरू करें",
+  "pricing.cta.marketplace": "मार्केटप्लेस ऐप देखें",
+  "pricing.cta.marketplaceNote": "Growth और Pro में शामिल।",
+  "marketplace.title": "मार्केटप्लेस",
+  "marketplace.subtitle": "कक्षाएँ, भुगतान, सदस्य ऐप, WhatsApp और अधिक के लिए ऐप इंस्टॉल करें।"
+}

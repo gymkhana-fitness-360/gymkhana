@@ -1,0 +1,51 @@
+---
+name: comms-ops
+description: WhatsApp campaigns (probe → draft → queue), send history, Meta WABA only
+---
+
+# Communications ops
+
+Product policy: **Meta WABA only** — no OpenWA in dashboard UI.
+
+Playbook: [references/playbooks/whatsapp-campaign.md](../references/playbooks/whatsapp-campaign.md)
+
+## Campaign flow (standard — not hardcoded cohorts)
+
+1. **Probe** — `POST /api/campaigns/probe` → audience count + analytics + sample
+2. **Draft** — `POST /api/campaigns` → `WhatsAppCampaign` status `DRAFT`
+3. **Queue** — `POST /api/campaigns/[id]/send` → status `QUEUED` (+ Inngest send when wired)
+
+Segments are **configurable enums** in `domains/campaigns/service.ts`:
+
+- `expiring_this_week` | `overdue` | `lapsed_30d` | `all_active`
+
+Forbidden: hardcoded member ID lists in UI; Feb-cohort / loyalist one-off pages.
+
+## Domain service
+
+```typescript
+// src/domains/campaigns/service.ts
+probeCampaignAudience(gymId, segment)
+createCampaignDraft({ gymId, name, message, segment, analytics })
+queueCampaignSend(gymId, campaignId)
+```
+
+Store `segment` + `analytics` JSON on campaign row for audit.
+
+## Send history
+
+- Model: `WhatsAppSendLog` — `memberName`, `sentAt`, `type`, `status`
+- API: `GET /api/admin/wa-log` — gym-scoped, paginated
+- UI: `/dashboard/wa-history` — read-only
+
+## WhatsApp send
+
+- Adapter: `domains/communications/adapters/meta-waba-adapter.ts`
+- Copy: `lib/messaging/whatsapp-copy.ts`
+- Cron reports: `sendMetaWabaText()` when `ADMIN_REPORT_PHONES` set
+
+## Dashboard one-pager pattern
+
+Single page: probe → show analytics card → message + name → create → list drafts with queue button.
+
+Use `SelectNative` or shadcn Select if installed — do not add missing `@/components/ui/select` dependency.

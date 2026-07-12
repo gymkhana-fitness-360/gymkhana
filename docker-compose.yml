@@ -1,0 +1,25 @@
+# Fitness360 local stack — started by `npx @fitness360/cli init`
+# App runs on the host via `npm run dev`; this file provides Postgres only.
+name: fitness360
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: fitness360-pg
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: fitness360
+      POSTGRES_PASSWORD: fitness360
+      POSTGRES_DB: fitness360
+    volumes:
+      - fitness360_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fitness360 -d fitness360"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  fitness360_pgdata:

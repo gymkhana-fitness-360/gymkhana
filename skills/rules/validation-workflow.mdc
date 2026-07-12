@@ -1,0 +1,42 @@
+---
+name: validation-workflow
+description: Auto-fix loop for typecheck, lint, and skill audits — up to 6 iterations
+---
+
+# Validation workflow
+
+**MANDATORY:** A task is not complete until `/dev-validate` passes — see [commands/validate.md](../commands/validate.md).
+
+## Auto-fix loop (max 6 iterations)
+
+1. Run `/dev-validate` (or `/dev-validate --quick` mid-task) — agent executes `tsx skills/scripts/validate.ts`
+2. Parse failures by category: typecheck | lint | tenant | zod | tests
+3. Fix highest-priority category first
+4. Re-run validation
+5. Repeat until clean or iteration 6
+
+## Priority order
+
+| Priority | Category | Command |
+|----------|----------|---------|
+| P0 | Tenant scope P0 | `npm run audit:tenant-scope:p0` |
+| P1 | TypeScript | `npm run typecheck` |
+| P2 | Mutating Zod | `npm run audit:mutating-zod` |
+| P3 | Lint (touched files) | `npm run lint` |
+| P4 | Unit tests | `npm run test:ci` |
+| P5 | Smoke E2E | `npm run test:e2e:smoke` |
+
+## After intentional deviation
+
+`/dev-learn capture --suggested "..." --actual "..." --reason "..."`
+
+Or:
+
+`/dev-learn auto --staged`
+
+## Never claim complete when
+
+- Typecheck has errors
+- `audit:tenant-scope:p0` fails on touched APIs
+- New mutating route lacks Zod
+- Migration not applied on clean DB (if schema changed)

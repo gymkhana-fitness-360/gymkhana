@@ -1,0 +1,8 @@
+import { MEMBERSHIP_RULES, PLAN_RULES } from "./rules";
+
+export const MEMBERSHIP_VALIDATION = {
+  durations: MEMBERSHIP_RULES.DURATIONS,
+  defaultDurationDays: MEMBERSHIP_RULES.DEFAULT_DURATION_DAYS,
+  gracePeriodDays: MEMBERSHIP_RULES.GRACE_PERIOD_DAYS,
+  defaultPlanId: PLAN_RULES.DEFAULT_PLAN_ID,
+} as const;

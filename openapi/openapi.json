@@ -1,0 +1,2897 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Fitness360 API",
+    "version": "1.0.0",
+    "description": "Generated from App Router route files + agent tool registry (GYM-OS-C-006)"
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "next-auth.session-token"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "OAuth"
+      }
+    }
+  },
+  "paths": {
+    "/agent/v1/health": {
+      "get": {
+        "summary": "GET /agent/v1/health",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/agent/v1/tools/{name}": {
+      "post": {
+        "summary": "POST /agent/v1/tools/{name}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/agent/v1/tools/overdue": {
+      "get": {
+        "summary": "GET /agent/v1/tools/overdue",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/agents/profiles": {
+      "get": {
+        "summary": "GET /agents/profiles",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/ai/whatsapp/draft-engagement": {
+      "post": {
+        "summary": "POST /ai/whatsapp/draft-engagement",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/ai/whatsapp/draft-reminder": {
+      "post": {
+        "summary": "POST /ai/whatsapp/draft-reminder",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/analytics/attendance-heatmap": {
+      "get": {
+        "summary": "GET /analytics/attendance-heatmap",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/analytics/member-readiness": {
+      "get": {
+        "summary": "GET /analytics/member-readiness",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/analytics/payment-timing": {
+      "get": {
+        "summary": "GET /analytics/payment-timing",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/analytics/summary": {
+      "get": {
+        "summary": "GET /analytics/summary",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/approvals": {
+      "get": {
+        "summary": "GET /approvals",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /approvals",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "PATCH /approvals",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/assistant/config": {
+      "get": {
+        "summary": "GET /assistant/config",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/attendance/qr": {
+      "get": {
+        "summary": "GET /attendance/qr",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /attendance/qr",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/attendance": {
+      "get": {
+        "summary": "GET /attendance",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /attendance",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/audit": {
+      "get": {
+        "summary": "GET /audit",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/bills/{id}": {
+      "get": {
+        "summary": "GET /bills/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /bills/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/bills": {
+      "get": {
+        "summary": "GET /bills",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /bills",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/bills/templates": {
+      "get": {
+        "summary": "GET /bills/templates",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/challenges/participants": {
+      "post": {
+        "summary": "POST /challenges/participants",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "PATCH /challenges/participants",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /challenges/participants",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/challenges": {
+      "get": {
+        "summary": "GET /challenges",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /challenges",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "PATCH /challenges",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /challenges",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/classes/{id}/bookings": {
+      "get": {
+        "summary": "GET /classes/{id}/bookings",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /classes/{id}/bookings",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/classes": {
+      "get": {
+        "summary": "GET /classes",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /classes",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/commerce/gym-gst": {
+      "get": {
+        "summary": "GET /commerce/gym-gst",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "PATCH /commerce/gym-gst",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/commerce/invoices/{id}": {
+      "get": {
+        "summary": "GET /commerce/invoices/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/commerce/invoices": {
+      "get": {
+        "summary": "GET /commerce/invoices",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /commerce/invoices",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/commerce/order-lines": {
+      "get": {
+        "summary": "GET /commerce/order-lines",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /commerce/order-lines",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/commerce/products/{id}/marketplace-reference": {
+      "get": {
+        "summary": "GET /commerce/products/{id}/marketplace-reference",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "PATCH /commerce/products/{id}/marketplace-reference",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/commerce/products/{id}": {
+      "patch": {
+        "summary": "PATCH /commerce/products/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/commerce/products": {
+      "get": {
+        "summary": "GET /commerce/products",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /commerce/products",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/communications/events": {
+      "get": {
+        "summary": "GET /communications/events",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/cron/overdue-cleanup": {
+      "get": {
+        "summary": "GET /cron/overdue-cleanup",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    },
+    "/cron/unified": {
+      "get": {
+        "summary": "GET /cron/unified",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    },
+    "/cron/update-membership": {
+      "get": {
+        "summary": "GET /cron/update-membership",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    },
+    "/dashboard/collections": {
+      "get": {
+        "summary": "GET /dashboard/collections",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/dashboard/sidebar-counts": {
+      "get": {
+        "summary": "GET /dashboard/sidebar-counts",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/diet-assignments/{id}/compliance": {
+      "post": {
+        "summary": "POST /diet-assignments/{id}/compliance",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/expenses/{id}": {
+      "put": {
+        "summary": "PUT /expenses/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /expenses/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/expenses": {
+      "get": {
+        "summary": "GET /expenses",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /expenses",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/free-trial-visits/{id}": {
+      "delete": {
+        "summary": "DELETE /free-trial-visits/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/free-trial-visits": {
+      "get": {
+        "summary": "GET /free-trial-visits",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /free-trial-visits",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/goals": {
+      "get": {
+        "summary": "GET /goals",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /goals",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "GET /health",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /health",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/intelligence/gym-facts": {
+      "get": {
+        "summary": "GET /intelligence/gym-facts",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/leaderboard": {
+      "get": {
+        "summary": "GET /leaderboard",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/leads/{id}/book-trial": {
+      "post": {
+        "summary": "POST /leads/{id}/book-trial",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/leads/{id}": {
+      "patch": {
+        "summary": "PATCH /leads/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/leads/follow-up": {
+      "get": {
+        "summary": "GET /leads/follow-up",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/leads/inbound": {
+      "post": {
+        "summary": "POST /leads/inbound",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/leads": {
+      "get": {
+        "summary": "GET /leads",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /leads",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/marketplace/{slug}": {
+      "patch": {
+        "summary": "PATCH /marketplace/{slug}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/mcp": {
+      "get": {
+        "summary": "GET /mcp",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /mcp",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /mcp",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/member/otp/send": {
+      "post": {
+        "summary": "POST /member/otp/send",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/member/otp/verify": {
+      "post": {
+        "summary": "POST /member/otp/verify",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/member/supplements/{productId}/reference": {
+      "get": {
+        "summary": "GET /member/supplements/{productId}/reference",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/member/supplements": {
+      "get": {
+        "summary": "GET /member/supplements",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/members/{id}/communications": {
+      "get": {
+        "summary": "GET /members/{id}/communications",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/members/{id}/diet-plan": {
+      "get": {
+        "summary": "GET /members/{id}/diet-plan",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /members/{id}/diet-plan",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/members/{id}/insights": {
+      "get": {
+        "summary": "GET /members/{id}/insights",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/members/{id}": {
+      "get": {
+        "summary": "GET /members/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "PUT /members/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /members/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/members/fix-date": {
+      "post": {
+        "summary": "POST /members/fix-date",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/members/fix-expiry": {
+      "post": {
+        "summary": "POST /members/fix-expiry",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/members": {
+      "get": {
+        "summary": "GET /members",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /members",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/oauth/token": {
+      "post": {
+        "summary": "POST /oauth/token",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/offers": {
+      "get": {
+        "summary": "GET /offers",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /offers",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/offers/suggest-quiet": {
+      "post": {
+        "summary": "POST /offers/suggest-quiet",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/opportunities/chase-plan": {
+      "get": {
+        "summary": "GET /opportunities/chase-plan",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/opportunities": {
+      "get": {
+        "summary": "GET /opportunities",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/overdue/{id}": {
+      "patch": {
+        "summary": "PATCH /overdue/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /overdue/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/overdue/detect": {
+      "post": {
+        "summary": "POST /overdue/detect",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/overdue/list": {
+      "get": {
+        "summary": "GET /overdue/list",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/overdue": {
+      "get": {
+        "summary": "GET /overdue",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/payments/{id}": {
+      "patch": {
+        "summary": "PATCH /payments/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /payments/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/payments/{id}/send-bill": {
+      "post": {
+        "summary": "POST /payments/{id}/send-bill",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/payments/deduplicate": {
+      "post": {
+        "summary": "POST /payments/deduplicate",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/payments/fix-missing-memberships": {
+      "post": {
+        "summary": "POST /payments/fix-missing-memberships",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/payments/from-whatsapp": {
+      "post": {
+        "summary": "POST /payments/from-whatsapp",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/payments/quick-entry": {
+      "get": {
+        "summary": "GET /payments/quick-entry",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /payments/quick-entry",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/payments/razorpay/create-link": {
+      "post": {
+        "summary": "POST /payments/razorpay/create-link",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/payments": {
+      "get": {
+        "summary": "GET /payments",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /payments",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/payments/sent-status": {
+      "get": {
+        "summary": "GET /payments/sent-status",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/plans/{id}": {
+      "put": {
+        "summary": "PUT /plans/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /plans/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/plans": {
+      "get": {
+        "summary": "GET /plans",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /plans",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/predictions/refresh": {
+      "post": {
+        "summary": "POST /predictions/refresh",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/public/book-trial": {
+      "get": {
+        "summary": "GET /public/book-trial",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /public/book-trial",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/public/member-pay": {
+      "post": {
+        "summary": "POST /public/member-pay",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/reminders/history": {
+      "get": {
+        "summary": "GET /reminders/history",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/reminders": {
+      "get": {
+        "summary": "GET /reminders",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /reminders",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/reminders/unpaid": {
+      "get": {
+        "summary": "GET /reminders/unpaid",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/renewals/reminder-candidates": {
+      "get": {
+        "summary": "GET /renewals/reminder-candidates",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/renewals": {
+      "get": {
+        "summary": "GET /renewals",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/renewals/send-bulk-reminders": {
+      "post": {
+        "summary": "POST /renewals/send-bulk-reminders",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/renewals/send-reminder": {
+      "post": {
+        "summary": "POST /renewals/send-reminder",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/salaries/{id}": {
+      "put": {
+        "summary": "PUT /salaries/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /salaries/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/salaries": {
+      "get": {
+        "summary": "GET /salaries",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /salaries",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/settings/agent-clients/{clientId}": {
+      "delete": {
+        "summary": "DELETE /settings/agent-clients/{clientId}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/settings/agent-clients/{clientId}/token": {
+      "post": {
+        "summary": "POST /settings/agent-clients/{clientId}/token",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/settings/agent-clients/connect": {
+      "post": {
+        "summary": "POST /settings/agent-clients/connect",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/settings/agent-clients": {
+      "get": {
+        "summary": "GET /settings/agent-clients",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /settings/agent-clients",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/settings/agent-clients/test": {
+      "post": {
+        "summary": "POST /settings/agent-clients/test",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/settings/notifications": {
+      "get": {
+        "summary": "GET /settings/notifications",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "PUT /settings/notifications",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/settings": {
+      "get": {
+        "summary": "GET /settings",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "PUT /settings",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/settings/session": {
+      "get": {
+        "summary": "GET /settings/session",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "PUT /settings/session",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/trainers/commissions": {
+      "get": {
+        "summary": "GET /trainers/commissions",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /trainers/commissions",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "PATCH /trainers/commissions",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/trainers/leaderboard": {
+      "get": {
+        "summary": "GET /trainers/leaderboard",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/trials/active": {
+      "get": {
+        "summary": "GET /trials/active",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "GET /users/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "PUT /users/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /users/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "GET /users",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /users",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/webhooks/razorpay": {
+      "post": {
+        "summary": "POST /webhooks/razorpay",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    },
+    "/whatsapp/bulk": {
+      "post": {
+        "summary": "POST /whatsapp/bulk",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/whatsapp/campaigns": {
+      "get": {
+        "summary": "GET /whatsapp/campaigns",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /whatsapp/campaigns",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/whatsapp/health": {
+      "get": {
+        "summary": "GET /whatsapp/health",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/whatsapp/initialize": {
+      "post": {
+        "summary": "POST /whatsapp/initialize",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/whatsapp/member/{phone}": {
+      "get": {
+        "summary": "GET /whatsapp/member/{phone}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/whatsapp/send": {
+      "post": {
+        "summary": "POST /whatsapp/send",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/whatsapp/send-template": {
+      "post": {
+        "summary": "POST /whatsapp/send-template",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/whatsapp/status": {
+      "get": {
+        "summary": "GET /whatsapp/status",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/whatsapp/templates/{id}": {
+      "patch": {
+        "summary": "PATCH /whatsapp/templates/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /whatsapp/templates/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/whatsapp/templates": {
+      "get": {
+        "summary": "GET /whatsapp/templates",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /whatsapp/templates",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/workouts": {
+      "get": {
+        "summary": "GET /workouts",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /workouts",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /workouts",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/agent/v1/tools/searchMembers": {
+      "post": {
+        "summary": "Agent tool: searchMembers",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/getOverdues": {
+      "post": {
+        "summary": "Agent tool: getOverdues",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/listChaseCandidates": {
+      "post": {
+        "summary": "Agent tool: listChaseCandidates",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/getChasePlan": {
+      "post": {
+        "summary": "Agent tool: getChasePlan",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/sendReminder": {
+      "post": {
+        "summary": "Agent tool: sendReminder",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/getAttendanceHeatmap": {
+      "post": {
+        "summary": "Agent tool: getAttendanceHeatmap",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/listActiveTrials": {
+      "post": {
+        "summary": "Agent tool: listActiveTrials",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/getTrainerLeaderboard": {
+      "post": {
+        "summary": "Agent tool: getTrainerLeaderboard",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/getMemberInsights": {
+      "post": {
+        "summary": "Agent tool: getMemberInsights",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/getPaymentTimingInsights": {
+      "post": {
+        "summary": "Agent tool: getPaymentTimingInsights",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/listOffers": {
+      "post": {
+        "summary": "Agent tool: listOffers",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/createOffer": {
+      "post": {
+        "summary": "Agent tool: createOffer",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/draftEngagement": {
+      "post": {
+        "summary": "Agent tool: draftEngagement",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/getRenewals": {
+      "post": {
+        "summary": "Agent tool: getRenewals",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/convertTrialToMember": {
+      "post": {
+        "summary": "Agent tool: convertTrialToMember",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/createMembership": {
+      "post": {
+        "summary": "Agent tool: createMembership",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/cancelMembership": {
+      "post": {
+        "summary": "Agent tool: cancelMembership",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/getOperatingHoursFact": {
+      "post": {
+        "summary": "Agent tool: getOperatingHoursFact",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/recommendProducts": {
+      "post": {
+        "summary": "Agent tool: recommendProducts",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/listLeads": {
+      "post": {
+        "summary": "Agent tool: listLeads",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/createLead": {
+      "post": {
+        "summary": "Agent tool: createLead",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/updateLead": {
+      "post": {
+        "summary": "Agent tool: updateLead",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/convertLeadToTrial": {
+      "post": {
+        "summary": "Agent tool: convertLeadToTrial",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    },
+    "/agent/v1/tools/listLeadsDueForFollowUp": {
+      "post": {
+        "summary": "Agent tool: listLeadsDueForFollowUp",
+        "description": "OAuth Bearer + agent scopes. See ADR-002.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool result"
+          }
+        }
+      }
+    }
+  }
+}

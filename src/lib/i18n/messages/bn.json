@@ -1,0 +1,21 @@
+{
+  "nav.dashboard": "ড্যাশবোর্ড",
+  "nav.members": "সদস্য",
+  "nav.classes": "ক্লাস",
+  "nav.marketplace": "মার্কেটপ্লেস",
+  "nav.pricing": "মূল্য",
+  "member.home.title": "আমার জিম",
+  "member.home.membership": "সদস্যপদ",
+  "member.home.bookClass": "ক্লাস বুক করুন",
+  "member.home.payDues": "ফি পরিশোধ",
+  "member.classes.title": "ক্লাসের সময়সূচি",
+  "member.pay.title": "সদস্যপদ ফি পরিশোধ",
+  "pricing.title": "ভারতীয় জিমের জন্য সহজ মূল্য",
+  "pricing.subtitle": "INR প্ল্যান — কোনো লুকানো ফি নেই। বিনামূল্যে শুরু করুন, বাড়লে আপগ্রেড করুন।",
+  "pricing.feature.languages": "হিন্দি ও বাংলা UI",
+  "pricing.cta.getStarted": "শুরু করুন",
+  "pricing.cta.marketplace": "মার্কেটপ্লেস অ্যাপ দেখুন",
+  "pricing.cta.marketplaceNote": "Growth ও Pro-তে অন্তর্ভুক্ত।",
+  "marketplace.title": "মার্কেটপ্লেস",
+  "marketplace.subtitle": "ক্লাস, পেমেন্ট, সদস্য অ্যাপ, WhatsApp এবং আরও অনেকের জন্য অ্যাপ ইনস্টল করুন।"
+}

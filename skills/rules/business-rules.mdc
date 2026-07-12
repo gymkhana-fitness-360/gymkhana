@@ -1,0 +1,65 @@
+---
+name: business-rules
+description: Gym business constants and CRUD validation — payments, memberships, status, walk-ins, dates (IST)
+---
+
+# Business rules — ZERO TOLERANCE
+
+Full reference: [references/business-rules.md](../references/business-rules.md)
+
+## Before any payment or member write
+
+Use `src/lib/crud-business-validation.ts` — **not** ad-hoc checks in routes.
+
+```typescript
+import {
+  validatePaymentCreateContext,
+  validateMemberPhoneDigits,
+  assertMemberStatusTransition,
+  BusinessRuleViolation,
+} from "@/lib/crud-business-validation";
+```
+
+Catch `BusinessRuleViolation` → `ApiErrors.businessRule(e.message, e.code)`.
+
+## Constants — import, never duplicate
+
+| Domain | Import from |
+|--------|-------------|
+| Payments | `@/domains/payments/rules` → `PAYMENT_RULES` |
+| Memberships | `@/domains/memberships/rules` |
+| Member status | `@/domains/members/rules` → `STATUS_RULES` |
+| Walk-in / attendance | `@/domains/attendance/rules` |
+| Ops (undo TTL) | `@/domains/payments/rules` → `UNDO_DELETE_TTL_MS` |
+| Validation limits | `@/domains/kernel/validation-rules` |
+| Legacy aggregate | `BUSINESS_RULES` from `@/domains/kernel/business-rules` |
+
+## Non-negotiables
+
+| Rule | Enforcement |
+|------|-------------|
+| Payment ₹100 – ₹50,000 | `validatePaymentAmount()` |
+| Payment date = IST calendar date | `normalizeStorageCalendarDate()` |
+| Status transitions | `ACTIVE ↔ EXPIRED` only; audit on `EXPIRED→ACTIVE` |
+| Free trial | Max 2 lifetime per phone; amount must be 0 |
+| Plan.id globally unique | Do not assume per-gym plan IDs |
+| Phone 10–15 digits | `validateMemberPhoneDigits()` |
+| UI money display | `formatCurrency()` — not inline ₹ |
+| Duplicate payments | Use `shouldMergePaymentDuplicates()` — respect split-payment pairs |
+
+## Forbidden
+
+- Magic numbers (`100`, `50000`, `2`) inlined in handlers
+- Skipping `crud-business-validation` on write paths
+- Changing member status without `assertMemberStatusTransition()`
+- Storing payment dates as UTC midnight without IST date-only normalization
+- Returning generic 500 for `BusinessRuleViolation`
+
+## Verify after changes
+
+```bash
+npm run validate:business-rules
+npm run test:ci
+```
+
+Or `/dev-validate --quick` as part of the full gate.

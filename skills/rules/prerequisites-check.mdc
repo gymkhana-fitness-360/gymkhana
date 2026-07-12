@@ -1,0 +1,80 @@
+---
+name: prerequisites-check
+description: Mandatory environment gate before any Fitness360 dev task — run inline from SKILL.md
+---
+
+# Prerequisites check — MANDATORY FIRST ACTION
+
+Run **before** implementing features, fixing bugs, or claiming a task complete.
+
+## Step 1: Confirm repo root
+
+```bash
+node -p "require('./package.json').name"   # must print: fitness360
+pwd                                        # should be repo root, not a subfolder
+```
+
+| Result | Action |
+|--------|--------|
+| Not `fitness360` | STOP — `cd` to clone root or run `npx @fitness360/cli init --here` |
+| Path contains spaces | WARN — prefer path without spaces (Next.js resolution issues) |
+
+## Step 2: Toolchain
+
+```bash
+node --version    # >= v20.9.0
+npm --version     # >= 10
+```
+
+| Result | Action |
+|--------|--------|
+| Node < 20.9 | STOP — use nvm: `nvm install 20 && nvm use 20` |
+| npm missing | STOP |
+
+## Step 3: Environment file
+
+```bash
+test -f .env && echo ok || echo missing
+```
+
+Required keys in `.env`:
+
+| Key | Required |
+|-----|----------|
+| `DATABASE_URL` | yes |
+| `NEXTAUTH_URL` | yes |
+| `NEXTAUTH_SECRET` | yes |
+
+| Result | Action |
+|--------|--------|
+| `.env` missing | Run `npx @fitness360/cli init --here` or copy `.env.example` |
+| Missing required keys | Regenerate secrets via CLI init or `openssl rand -base64 32` |
+
+## Step 4: Database
+
+```bash
+docker ps --filter name=fitness360-pg --format '{{.Status}}' 2>/dev/null
+npx prisma migrate status 2>&1 | head -5
+```
+
+| Result | Action |
+|--------|--------|
+| Postgres down + local dev | `docker compose up -d postgres` |
+| Pending migrations | `npx prisma migrate deploy` (prod) or `npx prisma migrate dev` (dev) |
+| Prisma client stale | `npm run db:generate` |
+
+## Step 5: Quick health (optional but recommended)
+
+Run `/dev-debug`.
+
+## Routing table
+
+| State | Route to |
+|-------|----------|
+| Fresh clone, no `.env` | `/dev-setup` |
+| Env OK, implementing feature | Proceed + task slash command |
+| Typecheck/lint failing | `/dev-fix` |
+| Pre-PR | `/dev-validate` |
+| Runtime errors | `/dev-debug` |
+
+**Do not skip this check.** If any STOP condition applies, fix it before writing code.

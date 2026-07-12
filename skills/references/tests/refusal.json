@@ -1,0 +1,13 @@
+{
+  "forbidden_patterns": [
+    { "id": "prisma-in-route", "pattern": "src/app/api/.*/route\\.ts", "contains": "prisma\\.", "message": "No direct Prisma in API routes — use domain handlers" },
+    { "id": "gray-tokens", "pattern": "src/(app|components)/.*\\.(tsx|ts)", "contains": "(bg|text|border)-(gray|slate|zinc)-\\d+", "message": "Use semantic tokens — rules/ui-kit.mdc" },
+    { "id": "db-push-prod", "pattern": ".*", "contains": "prisma db push", "context": "production", "message": "Never db push in production" },
+    { "id": "openwa-ui", "pattern": "src/.*", "contains": "(OpenWA|open-wa|unofficial whatsapp)", "flags": "i", "message": "Meta WABA only in product UI" },
+    { "id": "marketing-in-dashboard", "pattern": "src/app/dashboard/.*", "contains": "(playground|marketing landing)", "flags": "i", "message": "Dashboard is product only" },
+    { "id": "magic-attendance-days", "pattern": "src/domains/attendance/.*", "contains": "CALL_LIST_MISSED.*=\\s*\\d", "message": "Import CALL_LIST_MISSED_OPERATIONAL_DAYS from ATTENDANCE_RULES" },
+    { "id": "inline-undo-ttl", "pattern": "src/.*", "contains": "30 \\* 60 \\* 1000", "message": "Use PAYMENT_RULES.UNDO_DELETE_TTL_MS for undo window" },
+    { "id": "cron-no-auth", "pattern": "src/app/api/cron/.*/route\\.ts", "contains": "export async function GET", "notContains": "verifyCronRequest", "message": "Cron routes must call verifyCronRequest" },
+    { "id": "hardcoded-campaign-cohort", "pattern": "src/app/dashboard/.*", "contains": "(feb-cohort|loyalist|win-back)", "flags": "i", "message": "Use /dashboard/campaigns + segment enum — no per-cohort pages" }
+  ]
+}

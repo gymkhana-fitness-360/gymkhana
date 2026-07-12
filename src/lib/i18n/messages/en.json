@@ -1,0 +1,21 @@
+{
+  "nav.dashboard": "Dashboard",
+  "nav.members": "Members",
+  "nav.classes": "Classes",
+  "nav.marketplace": "Marketplace",
+  "nav.pricing": "Pricing",
+  "member.home.title": "My Gym",
+  "member.home.membership": "Membership",
+  "member.home.bookClass": "Book a class",
+  "member.home.payDues": "Pay dues",
+  "member.classes.title": "Class schedule",
+  "member.pay.title": "Pay membership",
+  "pricing.title": "Simple pricing for Indian gyms",
+  "pricing.subtitle": "INR plans — no hidden fees. Start free, scale when you grow.",
+  "pricing.feature.languages": "Hindi & Bengali UI",
+  "pricing.cta.getStarted": "Get started",
+  "pricing.cta.marketplace": "Browse marketplace apps",
+  "pricing.cta.marketplaceNote": "included with Growth and Pro.",
+  "marketplace.title": "Marketplace",
+  "marketplace.subtitle": "Install apps for classes, payments, member portal, WhatsApp, and more."
+}

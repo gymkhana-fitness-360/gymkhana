@@ -1,0 +1,40 @@
+---
+name: tenant-scope
+description: Multi-tenant isolation — every query must scope by account/gym
+---
+
+# Tenant scope rules — ZERO TOLERANCE
+
+Fitness360 is multi-tenant. **Every** Prisma read/write that touches gym data must filter by `accountId` and/or `gymId`. See [docs/adr/003-mandatory-gym-id.md](../../docs/adr/003-mandatory-gym-id.md).
+
+## Required patterns
+
+```typescript
+// Resolve context once in handler
+const accountId = await resolveAccountIdForRequest(session, request);
+const gymId = await resolveGymIdForUser(session.user.id);
+
+// All queries include scope
+await prisma.member.findMany({ where: { accountId, gymId, deletedAt: null } });
+```
+
+## Forbidden
+
+| Pattern | Risk |
+|---------|------|
+| `findUnique({ where: { id } })` without account/gym check | Cross-tenant data leak |
+| ID from URL trusted without `assertResourceBelongsToAccount` | IDOR |
+| Global `findMany()` on tenant tables | Data exfiltration |
+
+## Verification
+
+```bash
+npm run audit:tenant-scope
+npm run audit:tenant-scope:p0    # fail CI on P0
+```
+
+## When adding APIs
+
+1. Handler receives scoped IDs from resolver — never trust client `accountId`
+2. Use `src/domains/tenancy/` assertion helpers
+3. Re-run tenant audit on touched files

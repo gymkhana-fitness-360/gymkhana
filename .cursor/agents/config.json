@@ -1,0 +1,68 @@
+{
+  "version": "1.0.0",
+  "agents": {
+    "orchestrator": {
+      "enabled": true,
+      "maxRetries": 3,
+      "timeout": 1800,
+      "parallelExecution": true,
+      "autoTriggers": ["user_message"]
+    },
+    "info-gathering": {
+      "enabled": true,
+      "maxQuestionsPerSession": 5,
+      "autoResearch": true,
+      "searchDepth": "thorough",
+      "autoTriggers": ["user_request", "requirement_change"]
+    },
+    "validation": {
+      "enabled": true,
+      "strictMode": true,
+      "requireTestPlan": true,
+      "riskThreshold": "medium",
+      "autoTriggers": ["requirements_complete"]
+    },
+    "builder": {
+      "enabled": true,
+      "autoTest": true,
+      "autoLint": true,
+      "testCoverageThreshold": 80,
+      "autoFix": true,
+      "autoTriggers": ["validation_approved", "roast_needs_fixes"]
+    },
+    "roast": {
+      "enabled": true,
+      "brutalityLevel": "high",
+      "autoFix": false,
+      "minIssuesForRejection": 2,
+      "autoTriggers": ["builder_complete", "file_change"]
+    },
+    "review": {
+      "enabled": true,
+      "requireAllChecks": true,
+      "allowMinorIssues": true,
+      "requireDocumentation": true,
+      "autoTriggers": ["roast_approved"]
+    },
+    "content-memory": {
+      "enabled": true,
+      "alwaysOn": true,
+      "storageLocation": ".cursor/memory/",
+      "enableEmbeddings": false,
+      "retentionDays": 365,
+      "autoTriggers": ["always"]
+    }
+  },
+  "workflow": {
+    "enforceOrder": true,
+    "allowSkipValidation": false,
+    "allowSkipRoast": false,
+    "allowSkipReview": false,
+    "maxIterations": 5
+  },
+  "notifications": {
+    "verbose": true,
+    "showProgress": true,
+    "showAgentThinking": true
+  }
+}

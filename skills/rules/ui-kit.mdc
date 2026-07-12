@@ -1,0 +1,39 @@
+---
+name: ui-kit
+description: Dashboard UI enforcement — shadcn + semantic tokens only
+---
+
+# UI kit rules — dashboard surfaces
+
+Full reference: [references/ui-kit.md](../references/ui-kit.md)
+
+## Required
+
+| Need | Import |
+|------|--------|
+| Primitives | `@/components/ui/*` |
+| Money | `formatCurrency()` from `@/lib/utils` |
+| Layout | `DashboardShell`, `AppSidebar`, `SidebarProvider` |
+| Page header | `dashboard-page-header.tsx` |
+
+## Semantic tokens (always)
+
+`bg-background`, `text-foreground`, `bg-muted`, `text-muted-foreground`, `border-border`, `bg-card`, `text-destructive`, sidebar CSS vars.
+
+## Forbidden
+
+| Pattern | Fix |
+|---------|-----|
+| `bg-gray-*`, `text-slate-*`, `border-zinc-*` | Semantic tokens |
+| Raw `₹${amount}` in JSX | `formatCurrency(amount)` |
+| Plain `<button>` for actions | `@/components/ui/button` |
+| New color hex in components | Extend `globals.css` variables |
+
+## Playground vs product
+
+- **Product/dashboard:** INR via `formatCurrency()` (en-IN, ₹)
+- **Playground (if present):** USD mock demo only — do not change for INR
+
+## Review skill
+
+Use `.cursor/skills/ui-ux-pro-max` for new pages and a11y polish.

@@ -1,0 +1,108 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules/
+**/node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+/playwright-report/
+/test-results/
+
+# next.js
+.next/
+**/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+Thumbs.db
+
+# debug / local logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+build.log
+*.log
+cookies.txt
+
+# env files (never commit secrets)
+.env*
+!.env.example
+!.env.mcp.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# tooling caches
+.fallow/
+.swc/
+.claude/
+
+/src/generated/prisma
+
+# WhatsApp automation session
+.whatsapp-session/
+.wwebjs_auth/
+.whatsapp-processed.json
+.baileys-auth/
+# Local / sensitive data (member payments, imports)
+/data/*
+!/data/README.md
+
+# Deployment cleanup - test artifacts, logs, temp data
+/build_history/
+/backups/
+/logs/
+.error-cache.json
+.heal-history.json
+/.validation-reports/
+
+# Legacy nested app copy (app lives at repo root)
+/gymflo/
+
+# Separate repositories - not tracked in main repo
+/fit360-backend/
+
+# Temporary docs and reports
+REPOSITORY_CLEANUP_REPORT.md
+MIGRATION_SUMMARY.md
+COMPLETE_QA_VALIDATION_REPORT.md
+QA_*.md
+TLA_PLUS_VERIFICATION_COMPLETE.md
+PHASE1_VALIDATION_GUIDE.md
+/docs/temp/
+GIT_COMMIT_STRATEGY.md
+PLUGIN_SYSTEM_EXPLAINED.md
+COMMIT_SUMMARY.md
+
+# Internal / commercial planning docs — these live in the private gymkhana-cloud
+# repo, never in the public product. Keep any local copies here (gitignored).
+/.dev/
+/docs/internal/
+
+# Competitive analysis, pricing models, and other spreadsheets — keep under /data/ locally
+*.xlsx
+*.xls
+
+# Pre-move backup (large; do not commit)
+.pre-move-gymflo-backup.tar.gz
+
+# Empty placeholder dirs
+/swe-agent-langgraph/

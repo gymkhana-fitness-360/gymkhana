@@ -1,0 +1,34 @@
+---
+name: security
+description: Security enforcement for self-hosted Fitness360
+---
+
+# Security rules
+
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) § Security (vulnerability reporting) and [docs/DEVELOPMENT.md](../../docs/DEVELOPMENT.md). Auth classes: [docs/adr/002-api-auth-classes.md](../../docs/adr/002-api-auth-classes.md).
+
+## Critical
+
+| Rule | Enforcement |
+|------|-------------|
+| No secrets in client bundles | Only `NEXT_PUBLIC_*` in browser |
+| Cron routes require `CRON_SECRET` bearer | `/api/cron/*` |
+| Staff APIs require session + permission | `requirePermission()` |
+| No PII in logs | Redact phone/email in error handlers |
+| Password reset tokens single-use + expiry | auth routes |
+
+## WhatsApp
+
+- **Meta Cloud Business API (WABA) only** in product UI and docs
+- No unofficial / OpenWA tooling references in user-facing copy
+
+## Auth
+
+- NextAuth JWT sessions — `src/lib/auth.ts`
+- OAuth via `UserAuthProvider` — not business `Account`
+- Email users: synthetic `contactNumber` = `e:{email}`
+
+## Production
+
+- Never `prisma db push` in production — migrations only
+- `ALLOW_DEMO_ACCOUNT_AUTO_LINK` — non-production only
