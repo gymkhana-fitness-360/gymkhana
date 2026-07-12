@@ -92,9 +92,6 @@ jobs:
         run: npx prisma generate
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
-      - name: Prepare databases
-        run: |
-          PGPASSWORD=postgres psql -h localhost -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'gymkhana_ci'" | grep -q 1 || PGPASSWORD=postgres createdb -h localhost -U postgres gymkhana_ci
       - name: Apply migrations
         run: npx prisma migrate deploy
         env:
