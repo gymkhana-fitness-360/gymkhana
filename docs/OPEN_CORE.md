@@ -15,7 +15,7 @@ Self-hosters deploy this repo on their own infrastructure. White-label via `NEXT
 
 ## Not in this repo
 
-Marketing (`www.gymkhana.fit`), interactive playground, and the developers portal are **not** part of the open-source tree. They are operated separately by Gymkhana.
+Marketing (`www.gymkhana.fit`), interactive playground, developers portal, and the **agent dev skill** ([gymkhana-skills](https://github.com/gymkhana-fitness-360/gymkhana-skills)) are **not** part of this application repo.
 
 If you link to an external marketing site, set `NEXT_PUBLIC_MARKETING_SITE_URL` (see `.env.example`).
 
