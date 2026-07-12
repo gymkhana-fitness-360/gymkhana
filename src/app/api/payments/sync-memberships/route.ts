@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ApiErrors } from "@/lib/api-handler";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
 import { requireApiGymId } from "@/lib/api/gym-context";
 import { todayIST } from "@/lib/date-only";
+
+const syncBodySchema = z.object({}).passthrough();
 
 /** Reconcile membership end dates from latest completed payments per member. */
 export async function POST(request: NextRequest) {
@@ -14,6 +17,9 @@ export async function POST(request: NextRequest) {
   if (!session?.user?.id) return ApiErrors.unauthorized();
   const gymId = await requireApiGymId(session, request);
   if (gymId instanceof NextResponse) return gymId;
+
+  const body = await request.json().catch(() => ({}));
+  syncBodySchema.parse(body);
 
   const members = await prisma.member.findMany({
     where: { gymId },

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
@@ -7,6 +8,8 @@ import {
 } from "@/lib/gym-scope";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
 import { ApiErrors } from "@/lib/api-handler";
+
+const restoreBodySchema = z.object({}).passthrough();
 
 type Entity = "member" | "bill" | "lead";
 
@@ -31,6 +34,9 @@ export async function POST(
     readRequestedGymIdFromRequest(request)
   );
   if (!gymId) return ApiErrors.badRequest("No gym selected");
+
+  const body = await request.json().catch(() => ({}));
+  restoreBodySchema.parse(body);
 
   const { entity: entityRaw, id } = await params;
   const entity = parseEntity(entityRaw);

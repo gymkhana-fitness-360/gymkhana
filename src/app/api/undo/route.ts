@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { ApiErrors } from "@/lib/api-handler";
 import { successResponse } from "@/lib/api-response";
@@ -11,6 +12,11 @@ import {
 import { createLogger } from "@/lib/logger";
 
 const logger = createLogger("api-undo");
+
+const undoBodySchema = z.object({
+  confirm: z.literal(true),
+  auditLogId: z.string().optional(),
+});
 
 export async function GET(request: NextRequest) {
   const rl = withRateLimit(request, "lenient");
@@ -40,14 +46,11 @@ export async function POST(request: NextRequest) {
   const gymId = await requireApiGymId(session, request);
   if (gymId instanceof Response) return gymId;
 
-  const body = (await request.json().catch(() => ({}))) as {
-    auditLogId?: string;
-    confirm?: boolean;
-  };
-
-  if (body.confirm !== true) {
+  const parsed = undoBodySchema.safeParse(await request.json().catch(() => ({})));
+  if (!parsed.success) {
     return ApiErrors.validationError('Set "confirm": true to restore deleted data.');
   }
+  const body = parsed.data;
 
   let auditLogId = body.auditLogId;
   if (!auditLogId) {

@@ -30,6 +30,7 @@ jobs:
         run: npx prisma generate
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
 
       - name: Lint
         run: npm run lint
@@ -43,27 +44,50 @@ jobs:
       - name: Generate OpenAPI spec
         run: npm run openapi:generate
 
+      - name: OpenAPI freshness
+        run: npm run openapi:check
+
       - name: Unit tests
         run: npm run test:ci
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
           CRON_SECRET: ci-placeholder-cron-secret
 
       - name: Typecheck
         run: npx tsc --noEmit
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
 
       - name: Build
         run: npm run build
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
           NEXTAUTH_SECRET: ci-placeholder-secret-for-build-only-min-32-chars!!
           NEXTAUTH_URL: http://localhost:3000
 
   prisma-migrate:
     name: Prisma migrate check
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
+      DIRECT_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: gymkhana_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -74,11 +98,15 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
         env:
-          DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
-      - name: Validate migration history
-        run: npx prisma migrate diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --exit-code
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
+          DIRECT_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
+      - name: Apply migrations
+        run: npx prisma migrate deploy
         env:
-          DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
+          DIRECT_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_ci
+      - name: Validate Prisma schema
+        run: npx prisma validate
 
   api-audit:
     name: API route audit freshness
@@ -108,12 +136,14 @@ jobs:
         run: npx prisma generate
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
       - name: Install Playwright
         run: npx playwright install --with-deps chromium
       - name: Build
         run: npm run build
         env:
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
           NEXTAUTH_SECRET: ci-placeholder-secret-for-build-only-min-32-chars!!
           NEXTAUTH_URL: http://localhost:3000
       - name: E2E smoke
@@ -122,4 +152,6 @@ jobs:
           CI: "true"
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
           NEXTAUTH_SECRET: ci-placeholder-secret-for-build-only-min-32-chars!!
-          NEXTAUTH_URL: http://localhost:3000
+          NEXTAUTH_URL: https://localhost:3000
+          CRON_SECRET: ci-placeholder-cron-secret-min-32-chars!!
+          ALLOW_DEMO_ACCOUNT_AUTO_LINK: "false"
