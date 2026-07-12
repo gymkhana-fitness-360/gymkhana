@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+# Reject direct pushes to main — use a PR (see docs/BRANCH_POLICY.md).
+protected_branch='main'
+while read -r local_ref local_sha remote_ref remote_sha; do
+  branch="${remote_ref#refs/heads/}"
+  if [ "$branch" = "$protected_branch" ]; then
+    echo "error: direct push to '$protected_branch' is not allowed."
+    echo "Create a branch and open a pull request. See docs/BRANCH_POLICY.md"
+    exit 1
+  fi
+done
+exit 0

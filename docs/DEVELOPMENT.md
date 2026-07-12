@@ -61,6 +61,8 @@ npm run audit:mutating-zod
 npm run audit:tenant-scope
 ```
 
+**Merge via pull request only** — see [BRANCH_POLICY.md](BRANCH_POLICY.md). CI must pass on the PR before merge.
+
 If you changed public HTTP APIs:
 
 ```bash
