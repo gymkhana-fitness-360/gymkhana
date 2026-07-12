@@ -16,6 +16,7 @@ import { MemberMembershipHistory } from "@/components/members/MemberMembershipHi
 import { MemberInsightsPanel } from "@/components/members/MemberInsightsPanel";
 import { MemberEngagementTimeline } from "@/components/members/MemberEngagementTimeline";
 import { MemberDetailTabs } from "@/components/members/MemberDetailTabs";
+import { MemberPhotoCard } from "@/components/members/MemberPhotoCard";
 
 const logger = createLogger("dashboard-members");
 
@@ -27,6 +28,7 @@ interface Member {
   dateOfBirth: string | null;
   address: string | null;
   emergencyContact: string | null;
+  photo?: string | null;
   status: MemberStatus;
   joinDate: string;
   externalId: string | null;
@@ -317,6 +319,13 @@ export default function MemberDetailPage() {
           </div>
         )}
       </div>
+
+      <MemberPhotoCard
+        memberId={memberId}
+        name={member.name}
+        photo={member.photo}
+        onPhotoChange={() => void fetchMember()}
+      />
 
       {member && (
         <MemberDetailTabs

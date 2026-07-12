@@ -168,8 +168,83 @@ model Gym {
   AdminTask            AdminTask[]
   DailyStats           DailyStats[]
   ErrorLog             ErrorLog[]
+  CustomEntityDefinition CustomEntityDefinition[]
+  CustomEntityRecord   CustomEntityRecord[]
+  CustomAnalyticsDefinition CustomAnalyticsDefinition[]
 
   @@index([accountId])
+}
+
+enum CustomFieldType {
+  TEXT
+  NUMBER
+  BOOLEAN
+  DATE
+  SELECT
+}
+
+enum CustomAnalyticsSource {
+  MEMBERS
+  PAYMENTS
+  ATTENDANCE
+  CUSTOM_ENTITY
+}
+
+enum CustomAnalyticsAggregation {
+  COUNT
+  SUM
+  AVG
+}
+
+model CustomEntityDefinition {
+  id          String   @id @default(cuid())
+  gymId       String   @db.Uuid
+  slug        String
+  name        String
+  description String?
+  fields      Json
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Gym         Gym      @relation(fields: [gymId], references: [id], onDelete: Cascade)
+  Records     CustomEntityRecord[]
+
+  @@unique([gymId, slug])
+  @@index([gymId])
+}
+
+model CustomEntityRecord {
+  id        String                 @id @default(cuid())
+  gymId     String                 @db.Uuid
+  entityId  String
+  data      Json
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @updatedAt
+  Gym       Gym                    @relation(fields: [gymId], references: [id], onDelete: Cascade)
+  Entity    CustomEntityDefinition @relation(fields: [entityId], references: [id], onDelete: Cascade)
+
+  @@index([gymId, entityId])
+}
+
+model CustomAnalyticsDefinition {
+  id          String                     @id @default(cuid())
+  gymId       String                     @db.Uuid
+  slug        String
+  name        String
+  description String?
+  source      CustomAnalyticsSource
+  aggregation CustomAnalyticsAggregation @default(COUNT)
+  fieldKey    String?
+  entitySlug  String?
+  filters     Json?
+  groupBy     String?
+  isActive    Boolean                    @default(true)
+  createdAt   DateTime                   @default(now())
+  updatedAt   DateTime                   @updatedAt
+  Gym         Gym                        @relation(fields: [gymId], references: [id], onDelete: Cascade)
+
+  @@unique([gymId, slug])
+  @@index([gymId])
 }
 
 model Service {

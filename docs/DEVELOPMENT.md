@@ -24,10 +24,13 @@ Database env vars: [prisma/ENV.md](../prisma/ENV.md).
 ```
 src/app/api/     → HTTP routes (thin; delegate to domains)
 src/domains/     → business logic handlers and adapters
+  extensions/    → custom entities & custom analytics
 prisma/          → schema and migrations
 ```
 
 Architecture overview: [docs/adr/001-modular-monolith-first.md](adr/001-modular-monolith-first.md)
+
+**Extensions (custom entities & analytics):** `src/domains/extensions/` — per-gym JSON schemas and saved metrics; APIs at `/api/custom-entities` and `/api/custom-analytics`. Member photos: `src/lib/member-avatar.ts`, `/api/members/photo`.
 
 Agent skill (Cursor / Claude): [gymkhana-skills](https://github.com/gymkhana-fitness-360/gymkhana-skills) — `npx skills add gymkhana-fitness-360/gymkhana-skills@dev -y`
 
@@ -64,6 +67,15 @@ If you changed public HTTP APIs:
 npm run openapi:generate
 # commit openapi/openapi.json when the spec changes
 ```
+
+## Releases
+
+- **[CHANGELOG.md](../CHANGELOG.md)** — version history (Keep a Changelog).
+- **[docs/FEATURE_PARITY.md](FEATURE_PARITY.md)** — dashboard vs API vs MCP matrix.
+- **[docs/releases/](releases/)** — per-version notes for GitHub Releases.
+- Live portal: `www.gymkhana.fit/developers#releases` and `www.gymkhana.fit/docs/updates` (gymkhana-cloud).
+
+Bump `package.json` version, update `CHANGELOG.md`, `docs/releases/vX.Y.Z.md`, and cloud `src/data/releases/releases.ts` when shipping.
 
 ## Optional: agent / MCP
 

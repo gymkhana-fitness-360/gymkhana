@@ -23,8 +23,9 @@ Thank you for your interest in Fitness360. Contributions are welcome under the [
 2. Keep each PR **focused** — one bug, feature, or doc change when possible.
 3. **Keep `main` production-ready** — experimental prototypes and internal AI/WIP docs belong on feature branches, not `main`.
 4. Follow the [development guide](docs/DEVELOPMENT.md) for setup, conventions, and CI checks.
-5. Fill in the [pull request template](.github/pull_request_template.md).
-6. Ensure CI passes before requesting review.
+5. For releases: see [docs/RELEASES.md](docs/RELEASES.md) and update [CHANGELOG.md](CHANGELOG.md) when shipping user-visible changes.
+6. Fill in the [pull request template](.github/pull_request_template.md).
+7. Ensure CI passes before requesting review.
 
 ### Commit messages (public-friendly)
 

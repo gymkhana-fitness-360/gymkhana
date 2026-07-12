@@ -25,6 +25,94 @@
     }
   },
   "paths": {
+    "/admin/attendance/reassign-date": {
+      "post": {
+        "summary": "POST /admin/attendance/reassign-date",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/backdate-late-payments": {
+      "post": {
+        "summary": "POST /admin/backdate-late-payments",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/fix-stale-overdue": {
+      "post": {
+        "summary": "POST /admin/fix-stale-overdue",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/tasks": {
+      "get": {
+        "summary": "GET /admin/tasks",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /admin/tasks",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/wa-log": {
+      "get": {
+        "summary": "GET /admin/wa-log",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/agent/v1/health": {
       "get": {
         "summary": "GET /agent/v1/health",
@@ -118,6 +206,21 @@
     "/analytics/attendance-heatmap": {
       "get": {
         "summary": "GET /analytics/attendance-heatmap",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/analytics/cashflow": {
+      "get": {
+        "summary": "GET /analytics/cashflow",
         "responses": {
           "200": {
             "description": "OK"
@@ -231,6 +334,51 @@
         ]
       }
     },
+    "/attendance/bootstrap": {
+      "get": {
+        "summary": "GET /attendance/bootstrap",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/attendance/bootstrap/secondary": {
+      "get": {
+        "summary": "GET /attendance/bootstrap/secondary",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/attendance/call-list": {
+      "get": {
+        "summary": "GET /attendance/call-list",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/attendance/qr": {
       "get": {
         "summary": "GET /attendance/qr",
@@ -302,6 +450,94 @@
         ]
       }
     },
+    "/auth/password-reset": {
+      "post": {
+        "summary": "POST /auth/password-reset",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "PUT /auth/password-reset",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "summary": "POST /auth/signup",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/bills/{id}/allocate": {
+      "post": {
+        "summary": "POST /bills/{id}/allocate",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/bills/{id}/pdf": {
+      "get": {
+        "summary": "GET /bills/{id}/pdf",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/bills/{id}/refund": {
+      "post": {
+        "summary": "POST /bills/{id}/refund",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/bills/{id}": {
       "get": {
         "summary": "GET /bills/{id}",
@@ -361,6 +597,64 @@
     "/bills/templates": {
       "get": {
         "summary": "GET /bills/templates",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/campaigns/{id}/send": {
+      "post": {
+        "summary": "POST /campaigns/{id}/send",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/campaigns/probe": {
+      "post": {
+        "summary": "POST /campaigns/probe",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/campaigns": {
+      "get": {
+        "summary": "GET /campaigns",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /campaigns",
         "responses": {
           "200": {
             "description": "OK"
@@ -709,9 +1003,51 @@
         ]
       }
     },
+    "/cron/daily-overdue-report": {
+      "get": {
+        "summary": "GET /cron/daily-overdue-report",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "POST /cron/daily-overdue-report",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    },
+    "/cron/db-backup": {
+      "get": {
+        "summary": "GET /cron/db-backup",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    },
     "/cron/overdue-cleanup": {
       "get": {
         "summary": "GET /cron/overdue-cleanup",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    },
+    "/cron/refresh-daily-stats": {
+      "get": {
+        "summary": "GET /cron/refresh-daily-stats",
         "responses": {
           "200": {
             "description": "OK"
@@ -740,6 +1076,105 @@
           }
         },
         "security": []
+      }
+    },
+    "/custom-analytics/{slug}/run": {
+      "get": {
+        "summary": "GET /custom-analytics/{slug}/run",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/custom-analytics": {
+      "get": {
+        "summary": "GET /custom-analytics",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /custom-analytics",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/custom-entities/{id}/records": {
+      "get": {
+        "summary": "GET /custom-entities/{id}/records",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /custom-entities/{id}/records",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/custom-entities": {
+      "get": {
+        "summary": "GET /custom-entities",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /custom-entities",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
       }
     },
     "/dashboard/collections": {
@@ -775,6 +1210,36 @@
     "/diet-assignments/{id}/compliance": {
       "post": {
         "summary": "POST /diet-assignments/{id}/compliance",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/errors": {
+      "get": {
+        "summary": "GET /errors",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/expenses/{id}/mark-paid": {
+      "post": {
+        "summary": "POST /expenses/{id}/mark-paid",
         "responses": {
           "200": {
             "description": "OK"
@@ -914,6 +1379,34 @@
         ]
       }
     },
+    "/gym/profile": {
+      "get": {
+        "summary": "GET /gym/profile",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "PUT /gym/profile",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/health": {
       "get": {
         "summary": "GET /health",
@@ -987,9 +1480,50 @@
         ]
       }
     },
+    "/leads/{id}/follow-ups": {
+      "get": {
+        "summary": "GET /leads/{id}/follow-ups",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /leads/{id}/follow-ups",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/leads/{id}": {
       "patch": {
         "summary": "PATCH /leads/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /leads/{id}",
         "responses": {
           "200": {
             "description": "OK"
@@ -1305,6 +1839,36 @@
         ]
       }
     },
+    "/members/photo/generate": {
+      "post": {
+        "summary": "POST /members/photo/generate",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/members/photo": {
+      "post": {
+        "summary": "POST /members/photo",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/members": {
       "get": {
         "summary": "GET /members",
@@ -1321,6 +1885,49 @@
       },
       "post": {
         "summary": "POST /members",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/messaging/kanban": {
+      "get": {
+        "summary": "GET /messaging/kanban",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/notifications/inbox": {
+      "get": {
+        "summary": "GET /notifications/inbox",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "PATCH /notifications/inbox",
         "responses": {
           "200": {
             "description": "OK"
@@ -1582,6 +2189,34 @@
         ]
       }
     },
+    "/payments/future-membership-stack-cleanup": {
+      "get": {
+        "summary": "GET /payments/future-membership-stack-cleanup",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /payments/future-membership-stack-cleanup",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/payments/quick-entry": {
       "get": {
         "summary": "GET /payments/quick-entry",
@@ -1656,6 +2291,21 @@
     "/payments/sent-status": {
       "get": {
         "summary": "GET /payments/sent-status",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/payments/sync-memberships": {
+      "post": {
+        "summary": "POST /payments/sync-memberships",
         "responses": {
           "200": {
             "description": "OK"
@@ -1900,6 +2550,21 @@
         ]
       }
     },
+    "/restore/{entity}/{id}": {
+      "post": {
+        "summary": "POST /restore/{entity}/{id}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/salaries/{id}": {
       "put": {
         "summary": "PUT /salaries/{id}",
@@ -1944,6 +2609,34 @@
       },
       "post": {
         "summary": "POST /salaries",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/services": {
+      "get": {
+        "summary": "GET /services",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /services",
         "responses": {
           "200": {
             "description": "OK"
@@ -2199,6 +2892,34 @@
         ]
       }
     },
+    "/undo": {
+      "get": {
+        "summary": "GET /undo",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /undo",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/users/{id}": {
       "get": {
         "summary": "GET /users/{id}",
@@ -2256,6 +2977,36 @@
       },
       "post": {
         "summary": "POST /users",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/analytics/cashflow": {
+      "get": {
+        "summary": "GET /v1/analytics/cashflow",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/members": {
+      "get": {
+        "summary": "GET /v1/members",
         "responses": {
           "200": {
             "description": "OK"

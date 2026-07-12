@@ -2,7 +2,7 @@
 
 Open-source gym management platform — **Next.js 16**, **Prisma**, **PostgreSQL**.
 
-**Repository:** [github.com/gymkhana-fitness-360/gymkhana](https://github.com/gymkhana-fitness-360/gymkhana) · [Contributing](CONTRIBUTING.md)
+**Repository:** [github.com/gymkhana-fitness-360/gymkhana](https://github.com/gymkhana-fitness-360/gymkhana) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Releases](https://github.com/gymkhana-fitness-360/gymkhana/releases)
 
 ## Features
 
@@ -10,6 +10,8 @@ Open-source gym management platform — **Next.js 16**, **Prisma**, **PostgreSQL
 - Attendance (including QR check-in)
 - Dashboard analytics and billing
 - Optional WhatsApp Business API reminders (Meta Cloud API)
+
+See [CHANGELOG.md](CHANGELOG.md) and [GitHub Releases](https://github.com/gymkhana-fitness-360/gymkhana/releases) for version history. Feature parity: [docs/FEATURE_PARITY.md](docs/FEATURE_PARITY.md).
 
 ## Requirements
 
