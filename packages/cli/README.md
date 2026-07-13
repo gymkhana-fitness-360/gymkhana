@@ -23,7 +23,7 @@ npx @fitness360/cli doctor
 
 ## What it does
 
-1. Verifies Node.js ≥ 20.9
+1. Verifies Node.js ≥ 24
 2. Clones the repo (unless `--here` or already in repo)
 3. Writes `.env` with generated secrets and local Postgres URL
 4. `docker compose up -d postgres`

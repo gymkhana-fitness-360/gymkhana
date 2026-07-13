@@ -15,7 +15,7 @@ See [CHANGELOG.md](CHANGELOG.md) and [GitHub Releases](https://github.com/gymkha
 
 ## Requirements
 
-- Node.js **≥ 20.9**
+- Node.js **≥ 24**
 - PostgreSQL (local or hosted)
 - npm **≥ 10**
 

@@ -88,7 +88,7 @@ export async function runInit(args = []) {
   console.log("\n🏋️  Fitness360 — local setup\n");
 
   if (!nodeVersionOk()) {
-    throw new Error(`Node.js >= 20.9 required (current: ${process.version})`);
+    throw new Error(`Node.js >= 24 required (current: ${process.version})`);
   }
 
   const targetDir = resolveTargetDir(args);

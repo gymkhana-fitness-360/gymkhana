@@ -5,7 +5,7 @@ export async function runDoctor() {
   console.log("\nFitness360 doctor\n");
   warnIfPathHasSpaces(process.cwd());
   const checks = [
-    ["Node.js >= 20.9", nodeVersionOk(), process.version],
+    ["Node.js >= 24", nodeVersionOk(), process.version],
     ["npm", true, ""],
     ["Docker (recommended)", dockerAvailable(), dockerAvailable() ? "ok" : "not found"],
   ];
