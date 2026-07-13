@@ -12,6 +12,8 @@ export const ApiAuthClass = {
   CRON_BEARER: "CRON_BEARER",
   /** No session at edge; signature verified in route (e.g. Razorpay) */
   WEBHOOK_SIGNED: "WEBHOOK_SIGNED",
+  /** No session at edge; x-api-key verified in route handler */
+  API_KEY: "API_KEY",
   /** No session at edge; OAuth client_credentials or Bearer access token in route (ADR-002) */
   OAUTH_BEARER: "OAUTH_BEARER",
 } as const;
@@ -35,7 +37,6 @@ const PUBLIC_API_PREFIXES = [
   "/api/inngest",
   "/api/assistant",
   "/api/public",
-  "/api/v1",
 ] as const;
 
 export function classifyRoute(pathname: string): ApiAuthClassValue {
@@ -44,6 +45,9 @@ export function classifyRoute(pathname: string): ApiAuthClassValue {
   }
   if (pathname.startsWith("/api/webhooks")) {
     return ApiAuthClass.WEBHOOK_SIGNED;
+  }
+  if (pathname.startsWith("/api/v1")) {
+    return ApiAuthClass.API_KEY;
   }
   if (
     pathname.startsWith("/api/oauth") ||
@@ -78,6 +82,7 @@ export function bypassesSessionMiddleware(authClass: ApiAuthClassValue): boolean
     authClass === ApiAuthClass.PUBLIC ||
     authClass === ApiAuthClass.CRON_BEARER ||
     authClass === ApiAuthClass.WEBHOOK_SIGNED ||
-    authClass === ApiAuthClass.OAUTH_BEARER
+    authClass === ApiAuthClass.OAUTH_BEARER ||
+    authClass === ApiAuthClass.API_KEY
   );
 }

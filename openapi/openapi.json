@@ -21,10 +21,45 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "OAuth"
+      },
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
       }
     }
   },
   "paths": {
+    "/account-context": {
+      "post": {
+        "summary": "POST /account-context",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/accounts": {
+      "get": {
+        "summary": "GET /accounts",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/admin/attendance/reassign-date": {
       "post": {
         "summary": "POST /admin/attendance/reassign-date",
@@ -322,6 +357,21 @@
     "/assistant/config": {
       "get": {
         "summary": "GET /assistant/config",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/assistant": {
+      "post": {
+        "summary": "POST /assistant",
         "responses": {
           "200": {
             "description": "OK"
@@ -1407,6 +1457,64 @@
         ]
       }
     },
+    "/gym-context": {
+      "post": {
+        "summary": "POST /gym-context",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/gyms": {
+      "get": {
+        "summary": "GET /gyms",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/health/errors": {
+      "get": {
+        "summary": "GET /health/errors",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE /health/errors",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/health": {
       "get": {
         "summary": "GET /health",
@@ -1597,6 +1705,21 @@
     "/marketplace/{slug}": {
       "patch": {
         "summary": "PATCH /marketplace/{slug}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/marketplace": {
+      "get": {
+        "summary": "GET /marketplace",
         "responses": {
           "200": {
             "description": "OK"
@@ -2821,6 +2944,47 @@
         ]
       }
     },
+    "/settings/whatsapp-lifecycle-templates": {
+      "get": {
+        "summary": "GET /settings/whatsapp-lifecycle-templates",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "POST /settings/whatsapp-lifecycle-templates",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "PUT /settings/whatsapp-lifecycle-templates",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
     "/trainers/commissions": {
       "get": {
         "summary": "GET /trainers/commissions",
@@ -2999,7 +3163,7 @@
         },
         "security": [
           {
-            "cookieAuth": []
+            "apiKeyAuth": []
           }
         ]
       }
@@ -3007,6 +3171,21 @@
     "/v1/members": {
       "get": {
         "summary": "GET /v1/members",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/validate": {
+      "get": {
+        "summary": "GET /validate",
         "responses": {
           "200": {
             "description": "OK"
