@@ -3,7 +3,7 @@
 Auto-generated route inventory (`npm run audit:api-routes`). Regenerate after API changes.
 
 **Generated:** 2026-07-13  
-**Routes:** 169 · **Migrated:** 80 · **Partial:** 29 · **Direct Prisma:** 60
+**Routes:** 169 · **Migrated:** 82 · **Partial:** 29 · **Direct Prisma:** 58
 
 Regenerate: `npm run audit:api-routes`
 
@@ -120,7 +120,7 @@ Regenerate: `npm run audit:api-routes`
 | `/api/overdue` | collections | no | yes | migrated |
 | `/api/overdue/[id]` | collections | yes | no | direct-prisma |
 | `/api/overdue/detect` | collections | yes | yes | partial |
-| `/api/overdue/list` | collections | yes | no | direct-prisma |
+| `/api/overdue/list` | collections | no | yes | migrated |
 | `/api/payments` | payments | no | yes | migrated |
 | `/api/payments/[id]` | payments | no | yes | migrated |
 | `/api/payments/[id]/send-bill` | payments | no | yes | migrated |
@@ -131,7 +131,7 @@ Regenerate: `npm run audit:api-routes`
 | `/api/payments/quick-entry` | payments | no | yes | migrated |
 | `/api/payments/razorpay/create-link` | payments | yes | no | direct-prisma |
 | `/api/payments/sent-status` | payments | no | yes | migrated |
-| `/api/payments/sync-memberships` | payments | yes | no | direct-prisma |
+| `/api/payments/sync-memberships` | payments | no | yes | migrated |
 | `/api/plans` | memberships | yes | yes | partial |
 | `/api/plans/[id]` | memberships | no | yes | migrated |
 | `/api/predictions/refresh` | platform | no | yes | migrated |
