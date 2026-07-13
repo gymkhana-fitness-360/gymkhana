@@ -5,11 +5,10 @@ import { getWhatsAppDirectMessaging } from "@/domains/communications/send-port";
 import { prisma } from "@/lib/prisma";
 import { ApiErrors } from "@/lib/api-handler";
 import { parseJsonBody } from "@/lib/security/parse-json-body";
-import { formatSimpleReminderMessage } from "@/lib/templates/reminder-simple";
-import { formatDate } from "@/lib/utils";
+import { buildRenewalReminderDraft } from "@/domains/memberships/renewal-reminder-draft";
 import { logAction } from "@/lib/audit-logger";
 import { recordCommunicationEvent } from "@/domains/communications/communication-ledger";
-import { toDateOnlyIST, daysFromTodayIST } from "@/lib/date-only";
+import { formatDate } from "@/lib/utils";
 import { auth } from "@/lib/auth";
 import { refreshGoalRecovery, getActiveGoal } from "@/domains/goals/service";
 
@@ -47,21 +46,18 @@ export async function sendRenewalReminderHandler(
 
     if (!membership) return ApiErrors.notFound("Membership");
 
-    const endDate = toDateOnlyIST(membership.endDate);
-    const daysUntil = -daysFromTodayIST(endDate);
-    const daysOverdue = daysUntil < 0 ? Math.abs(daysUntil) : undefined;
-
-    const message = await formatSimpleReminderMessage({
-      name: membership.Member.name,
-      expiryDate: formatDate(membership.endDate),
-      daysLeft: daysUntil,
-      daysOverdue,
-      planName: membership.Plan?.name,
-      phoneNumber: membership.Member.phone,
+    const draft = await buildRenewalReminderDraft({
       gymId,
+      memberName: membership.Member.name,
+      memberPhone: membership.Member.phone ?? "",
+      endDate: membership.endDate,
+      planName: membership.Plan?.name,
     });
+    const message = draft.message;
+    const daysUntil = draft.daysUntil;
+    const daysOverdue = draft.daysOverdue;
 
-    const phone = membership.Member.phone?.replace(/\D/g, "") || "";
+    const phone = draft.phone;
     if (!phone || phone.length < 10) {
       return ApiErrors.validationError("Invalid phone number");
     }

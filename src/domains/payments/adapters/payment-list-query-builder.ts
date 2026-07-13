@@ -1,4 +1,5 @@
 import type { PaymentMethod, PaymentStatus, Prisma } from "@prisma/client";
+import { endOfDayIST, toDateOnlyIST } from "@/lib/date-only";
 import type { ListPaymentsParams } from "../types";
 
 export function buildPaymentListWhere(
@@ -19,12 +20,10 @@ export function buildPaymentListWhere(
   if (startDate || endDate) {
     where.receivedAt = {};
     if (startDate) {
-      where.receivedAt.gte = new Date(startDate);
+      where.receivedAt.gte = toDateOnlyIST(startDate);
     }
     if (endDate) {
-      const end = new Date(endDate);
-      end.setHours(23, 59, 59, 999);
-      where.receivedAt.lte = end;
+      where.receivedAt.lte = endOfDayIST(endDate);
     }
   }
   if (search) {

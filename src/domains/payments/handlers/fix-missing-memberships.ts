@@ -6,10 +6,6 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-import { parseJsonBody } from "@/lib/security/parse-json-body";
-
-const mutatingBodySchema = z.any();
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {

@@ -1,21 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { requireApiGymId } from "@/lib/api/gym-context";
+import { NextRequest } from "next/server";
+import { withRateLimit } from "@/lib/middleware/rate-limit";
+import { agentHealthHandler } from "@/domains/platform/agent/health";
 
-/** GYM-AI-002: agent gateway health (read-only stub). */
+/** GYM-AI-002: agent gateway health (OAuth bearer, read-only). */
 export async function GET(request: NextRequest) {
-  const session = await auth();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  const gymId = await requireApiGymId(session, request);
-  if (gymId instanceof NextResponse) {
-    return gymId;
-  }
-  return NextResponse.json({
-    status: "ok",
-    version: "v1",
-    gymId,
-    capabilities: ["health"],
-  });
+  const rl = withRateLimit(request, "lenient");
+  if (rl) return rl;
+  return agentHealthHandler(request);
 }

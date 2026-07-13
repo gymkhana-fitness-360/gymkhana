@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { z } from "zod";
-import { parseJsonBody } from "@/lib/security/parse-json-body";
-
-const mutatingBodySchema = z.any();
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { addDaysIST, toDateOnlyIST } from "@/lib/date-only";
 import { getWhatsAppService } from "@/lib/whatsapp";
 import { createLogger } from "@/lib/logger";
 import { ApiErrors } from "@/lib/api-handler";
@@ -123,14 +119,14 @@ export async function sendPaymentBillHandler(
     }
 
     const isAdmission = payment.packageDuration === "New Admission";
-    const receivedAt = new Date(payment.receivedAt);
+    const receivedAt = toDateOnlyIST(payment.receivedAt);
     const validFrom = receivedAt.toLocaleDateString("en-IN", {
       day: "2-digit",
       month: "short",
       year: "numeric",
+      timeZone: "Asia/Kolkata",
     });
-    const validTill = new Date(receivedAt);
-    validTill.setDate(validTill.getDate() + 30);
+    const validTill = addDaysIST(receivedAt, 30);
     const validTillStr = validTill.toLocaleDateString("en-IN", {
       day: "2-digit",
       month: "short",

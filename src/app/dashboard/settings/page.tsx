@@ -856,7 +856,29 @@ export default function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="agent" className="space-y-4">
-          <AgentMcpIntegrations />
+          {process.env.NEXT_PUBLIC_ENABLE_AGENT_API === "true" ? (
+            <AgentMcpIntegrations />
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>Agent &amp; MCP integrations</CardTitle>
+                <CardDescription>
+                  Available when ENABLE_AGENT_API is enabled for your deployment. Developer
+                  docs and the public playground live on the marketing site.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <a
+                  href={process.env.NEXT_PUBLIC_MARKETING_SITE_URL ?? "https://www.gymkhana.fit"}
+                  className="text-sm text-primary underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Open developers portal →
+                </a>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         <TabsContent value="logs" className="space-y-4">

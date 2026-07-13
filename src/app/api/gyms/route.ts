@@ -1,11 +1,7 @@
-import { NextResponse } from "next/server";
-import { listGymsForUser } from "@/lib/gym-scope";
 import { createApiHandler } from "@/lib/api-handler";
+import { listGymsHandler } from "@/domains/tenancy/handlers/gyms";
 
 export const GET = createApiHandler(
-  async (_request, { session }) => {
-    const gyms = await listGymsForUser(session.user.id);
-    return NextResponse.json({ gyms });
-  },
+  (request, { session }) => listGymsHandler(request, session!),
   { rateLimit: "lenient" },
 );

@@ -63,5 +63,9 @@ describe("invoice-ledger", () => {
     it("marks full payment as PAID", () => {
       expect(deriveBillStatus(1000, 1000, pastDue)).toBe(BillStatus.PAID);
     });
+
+    it("marks zero paid after refund as ISSUED when not past due", () => {
+      expect(deriveBillStatus(0, 1000, futureDue)).toBe(BillStatus.ISSUED);
+    });
   });
 });

@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-
 import { z } from "zod";
 import { parseJsonBody } from "@/lib/security/parse-json-body";
 
-const mutatingBodySchema = z.any();
+const fixMemberDateSchema = z
+  .object({
+    memberId: z.string().min(1).optional(),
+    memberName: z.string().min(1).optional(),
+    dateType: z.enum(["joinDate", "paymentDate", "membershipStartDate", "membershipEndDate"]),
+    correctDate: z.string().min(1),
+  })
+  .refine((d) => d.memberId || d.memberName, {
+    message: "Either memberId or memberName must be provided",
+  });
+
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
@@ -14,6 +23,7 @@ import { requirePermission, PermissionError } from "@/lib/permissions";
 import { createLogger } from "@/lib/logger";
 import { ApiErrors } from "@/lib/api-handler";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
+import { toDateOnlyIST } from "@/lib/date-only";
 
 const logger = createLogger("api-members");
 import {
@@ -39,10 +49,9 @@ export async function fixMemberDateHandler(request: NextRequest) {
     // Check permissions
     requirePermission(session, "canEditMembers");
 
-    const parsedBody = await parseJsonBody(request, mutatingBodySchema);
+    const parsedBody = await parseJsonBody(request, fixMemberDateSchema);
     if (!parsedBody.ok) return parsedBody.response;
-    const body = parsedBody.data as any;
-    const { memberId, dateType, correctDate, memberName } = body;
+    const { memberId, dateType, correctDate, memberName } = parsedBody.data;
 
     if (!memberId && !memberName) {
       return ApiErrors.validationError(
@@ -92,10 +101,7 @@ export async function fixMemberDateHandler(request: NextRequest) {
       );
     }
 
-    const correctedDate = new Date(correctDate);
-    if (isNaN(correctedDate.getTime())) {
-      return ApiErrors.validationError("Invalid date format");
-    }
+    const correctedDate = toDateOnlyIST(correctDate);
 
     const updates: any = {};
 

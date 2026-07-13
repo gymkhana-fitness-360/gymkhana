@@ -24,9 +24,23 @@ const hints = [
   "parseJsonBody",
   "createApiHandler",
   "bodySchema",
-  "z.any()",
   "mutatingBodySchema",
 ];
+
+const zAnyForbidden = [];
+function scanZAny(dir, base = path.join(import.meta.dirname, "..", "src")) {
+  for (const name of fs.readdirSync(dir)) {
+    const p = path.join(dir, name);
+    if (fs.statSync(p).isDirectory()) scanZAny(p, base);
+    else if (name.endsWith(".ts") || name.endsWith(".tsx")) {
+      const text = fs.readFileSync(p, "utf8");
+      if (/\bz\.any\s*\(/.test(text)) {
+        zAnyForbidden.push(path.relative(base, p).replace(/\\/g, "/"));
+      }
+    }
+  }
+}
+scanZAny(path.join(import.meta.dirname, "..", "src"));
 
 const skipPatterns = [
   /Handler\s*\(/,
@@ -59,4 +73,11 @@ if (missing.length) {
   if (missing.length > 40) console.error(`  ... and ${missing.length - 40} more`);
   process.exit(1);
 }
+
+if (zAnyForbidden.length) {
+  console.error(`z.any() is forbidden (${zAnyForbidden.length}):`);
+  zAnyForbidden.forEach((f) => console.error(`  src/${f}`));
+  process.exit(1);
+}
+
 console.log("All mutating routes use Zod or domain handlers.");

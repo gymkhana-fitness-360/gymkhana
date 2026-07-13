@@ -4,6 +4,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { mapPrismaKnownError } from "@/lib/prisma-errors";
 
 // Standard error codes
 export type ErrorCode =
@@ -137,15 +138,8 @@ export function handleApiError(error: unknown, logger?: { error: (msg: string, e
     const name = error.name;
     
     // Prisma errors
-    if (name === "PrismaClientKnownRequestError") {
-      const prismaError = error as any;
-      if (prismaError.code === "P2002") {
-        return ApiErrors.duplicate("A record with this value already exists");
-      }
-      if (prismaError.code === "P2025") {
-        return ApiErrors.notFound("Record");
-      }
-    }
+    const prismaResponse = mapPrismaKnownError(error);
+    if (prismaResponse) return prismaResponse;
 
     // Permission errors
     if (name === "PermissionError") {

@@ -14,6 +14,7 @@ import { requirePermission, Permission, PermissionError } from "./permissions";
 import { ApiErrors, getErrorMessage, parseBodyWithLimit, validateEnum } from "./api-response";
 import { BusinessRuleViolation } from "./crud-business-validation";
 import { createLogger } from "./logger";
+import { mapPrismaKnownError } from "@/lib/prisma-errors";
 import { z } from "zod";
 
 const logger = createLogger("api-handler");
@@ -118,7 +119,7 @@ function handleError(error: unknown): NextResponse {
   }
 
   if (error instanceof BusinessRuleViolation) {
-    return ApiErrors.businessRule(message, (error as any).code);
+    return ApiErrors.businessRule(message, error.code);
   }
 
   if (error instanceof z.ZodError) {
@@ -126,18 +127,8 @@ function handleError(error: unknown): NextResponse {
   }
 
   // Prisma errors
-  if (error instanceof Error) {
-    const name = error.name;
-    if (name === "PrismaClientKnownRequestError") {
-      const prismaError = error as any;
-      if (prismaError.code === "P2002") {
-        return ApiErrors.duplicate("A record with this value already exists");
-      }
-      if (prismaError.code === "P2025") {
-        return ApiErrors.notFound("Record");
-      }
-    }
-  }
+  const prismaResponse = mapPrismaKnownError(error);
+  if (prismaResponse) return prismaResponse;
 
   // Log unexpected errors
   logger.error("Unhandled API error", error as Error);

@@ -30,14 +30,7 @@ export function isDevSelfHealEnabled(): boolean {
   );
 }
 
-export function isPlaygroundEnabled(): boolean {
-  return process.env.ENABLE_PLAYGROUND === "true";
-}
-
-export function isDevelopersPortalEnabled(): boolean {
-  return process.env.ENABLE_DEVELOPERS_PORTAL === "true";
-}
-
+/** Agent/MCP settings UI and /api/agent routes (playground/docs live on cloud). */
 export function isAgentApiEnabled(): boolean {
   return process.env.ENABLE_AGENT_API === "true";
 }
