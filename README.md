@@ -2,7 +2,7 @@
 
 Open-source gym management platform — **Next.js 16**, **Prisma**, **PostgreSQL**.
 
-**Repository:** [github.com/gymkhana-fitness-360/gymkhana](https://github.com/gymkhana-fitness-360/gymkhana) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Releases](https://github.com/gymkhana-fitness-360/gymkhana/releases)
+**Repository:** [github.com/gymkhana-fitness-360/gymkhana](https://github.com/gymkhana-fitness-360/gymkhana) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Release process](docs/RELEASES.md) · [GitHub Releases](https://github.com/gymkhana-fitness-360/gymkhana/releases)
 
 ## Features
 

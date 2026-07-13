@@ -90,7 +90,9 @@
     "db:seed-demo-gym": "tsx scripts/seed-demo-gym.ts",
     "db:seed-e2e-user": "tsx scripts/seed-e2e-user.ts",
     "mcp:setup": "tsx scripts/mcp-setup.ts",
-    "mcp:server": "sh scripts/run-mcp-server.sh"
+    "mcp:server": "sh scripts/run-mcp-server.sh",
+    "release:validate": "node scripts/release/validate-release.mjs",
+    "release:notes": "node scripts/release/extract-changelog.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.81",
