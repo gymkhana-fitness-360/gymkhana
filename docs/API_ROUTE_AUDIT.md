@@ -3,7 +3,7 @@
 Auto-generated route inventory (`npm run audit:api-routes`). Regenerate after API changes.
 
 **Generated:** 2026-07-13  
-**Routes:** 169 · **Migrated:** 82 · **Partial:** 29 · **Direct Prisma:** 58
+**Routes:** 169 · **Migrated:** 83 · **Partial:** 29 · **Direct Prisma:** 57
 
 Regenerate: `npm run audit:api-routes`
 
@@ -162,7 +162,7 @@ Regenerate: `npm run audit:api-routes`
 | `/api/trials/active` | platform | no | yes | migrated |
 | `/api/undo` | platform | no | no | direct-prisma |
 | `/api/users` | admin | yes | no | direct-prisma |
-| `/api/users/[id]` | admin | yes | no | direct-prisma |
+| `/api/users/[id]` | admin | no | yes | migrated |
 | `/api/v1/analytics/cashflow` | platform | no | yes | migrated |
 | `/api/v1/members` | platform | yes | no | direct-prisma |
 | `/api/validate` | platform | no | no | direct-prisma |
