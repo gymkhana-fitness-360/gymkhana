@@ -47,6 +47,7 @@ export const autonomousRecoveryQueue = inngest.createFunction(
                 where: { gymId },
                 orderBy: { endDate: "desc" },
                 take: 1,
+                include: { Plan: { select: { name: true } } },
               },
             },
           });
@@ -59,11 +60,15 @@ export const autonomousRecoveryQueue = inngest.createFunction(
               ? Math.max(0, -daysFromTodayIST(toDateOnlyIST(expiry)))
               : undefined;
 
-          const message = formatSimpleReminderMessage({
+          const message = await formatSimpleReminderMessage({
             name: member.name,
             expiryDate: expiry ? formatDate(expiry) : "soon",
+            daysLeft:
+              expiry != null ? -daysFromTodayIST(toDateOnlyIST(expiry)) : undefined,
             daysOverdue: daysOverdue || undefined,
+            planName: member.Membership[0]?.Plan?.name,
             phoneNumber: member.phone,
+            gymId,
           });
 
           await createSendReminderApproval(gymId, "system:autonomous-recovery", {

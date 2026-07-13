@@ -37,32 +37,40 @@ export async function sendBulkRenewalRemindersHandler(
 
     const memberships = await prisma.membership.findMany({
       where: { gymId, memberId: { in: parsed.data.memberIds } },
-      include: { Member: { select: { id: true, name: true, phone: true } } },
+      include: {
+        Member: { select: { id: true, name: true, phone: true } },
+        Plan: { select: { name: true } },
+      },
       orderBy: { endDate: "desc" },
       distinct: ["memberId"],
     });
 
-    const drafts = memberships.map((membership) => {
-      const endDate = toDateOnlyIST(membership.endDate);
-      const daysUntil = -daysFromTodayIST(endDate);
-      const daysOverdue = daysUntil < 0 ? Math.abs(daysUntil) : undefined;
-      const phone = membership.Member.phone?.replace(/\D/g, "") || "";
-      const message = formatSimpleReminderMessage({
-        name: membership.Member.name,
-        expiryDate: formatDate(membership.endDate),
-        daysOverdue,
-        phoneNumber: phone,
-      });
-      return {
-        memberId: membership.Member.id,
-        memberName: membership.Member.name,
-        membershipId: membership.id,
-        phoneNumber: phone,
-        validPhone: phone.length >= 10,
-        message,
-        reminderType: daysOverdue ? "OVERDUE" : "RENEWAL",
-      };
-    });
+    const drafts = await Promise.all(
+      memberships.map(async (membership) => {
+        const endDate = toDateOnlyIST(membership.endDate);
+        const daysUntil = -daysFromTodayIST(endDate);
+        const daysOverdue = daysUntil < 0 ? Math.abs(daysUntil) : undefined;
+        const phone = membership.Member.phone?.replace(/\D/g, "") || "";
+        const message = await formatSimpleReminderMessage({
+          name: membership.Member.name,
+          expiryDate: formatDate(membership.endDate),
+          daysLeft: daysUntil,
+          daysOverdue,
+          planName: membership.Plan?.name,
+          phoneNumber: phone,
+          gymId,
+        });
+        return {
+          memberId: membership.Member.id,
+          memberName: membership.Member.name,
+          membershipId: membership.id,
+          phoneNumber: phone,
+          validPhone: phone.length >= 10,
+          message,
+          reminderType: daysOverdue ? "OVERDUE" : "RENEWAL",
+        };
+      }),
+    );
 
     if ("previewOnly" in parsed.data && parsed.data.previewOnly) {
       return NextResponse.json({

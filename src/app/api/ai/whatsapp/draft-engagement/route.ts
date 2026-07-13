@@ -29,7 +29,12 @@ export async function POST(request: NextRequest) {
     const member = await prisma.member.findFirst({
       where: { id: parsed.data.memberId, gymId },
       include: {
-        Membership: { where: { gymId }, orderBy: { endDate: "desc" }, take: 1 },
+        Membership: {
+          where: { gymId },
+          orderBy: { endDate: "desc" },
+          take: 1,
+          include: { Plan: { select: { name: true } } },
+        },
       },
     });
     if (!member) return ApiErrors.notFound("Member");
@@ -42,11 +47,15 @@ export async function POST(request: NextRequest) {
         ? Math.max(0, -daysFromTodayIST(toDateOnlyIST(expiry)))
         : undefined;
 
-    let draft = formatSimpleReminderMessage({
+    let draft = await formatSimpleReminderMessage({
       name: member.name,
       expiryDate: expiry ? formatDate(expiry) : "soon",
+      daysLeft:
+        expiry != null ? -daysFromTodayIST(toDateOnlyIST(expiry)) : undefined,
       daysOverdue: daysOverdue || undefined,
+      planName: membership?.Plan?.name,
       phoneNumber: member.phone,
+      gymId,
     });
 
     const purpose = parsed.data.purpose ?? "general";
