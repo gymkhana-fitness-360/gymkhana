@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { MemberStatus } from "@prisma/client";
-import { todayIST, addDaysIST } from "@/lib/date-only";
+import { todayIST } from "@/lib/date-only";
+import { createOrExtendMembership } from "@/lib/services/membership.service";
 
 export async function createMembershipForMember(
   gymId: string,
@@ -10,6 +11,7 @@ export async function createMembershipForMember(
     amount: number;
     startDate?: Date;
     durationMonths?: number;
+    userId?: string;
   },
 ) {
   const member = await prisma.member.findFirst({
@@ -22,30 +24,27 @@ export async function createMembershipForMember(
   });
   if (!plan) return null;
 
-  const start = input.startDate ?? todayIST();
-  const durationDays = input.durationMonths
-    ? input.durationMonths * 30
-    : plan.durationDays;
-  const end = addDaysIST(start, durationDays);
+  const duration =
+    input.durationMonths != null
+      ? input.durationMonths === 1
+        ? "monthly"
+        : `${input.durationMonths}month`
+      : null;
 
-  const membership = await prisma.membership.create({
-    data: {
-      gymId,
-      memberId: input.memberId,
-      planId: input.planId,
-      amount: input.amount,
-      startDate: start,
-      endDate: end,
-    },
+  const result = await createOrExtendMembership({
+    memberId: input.memberId,
+    gymId,
+    planId: input.planId,
+    amount: input.amount,
+    paymentDate: input.startDate ?? todayIST(),
+    duration,
+    userId: input.userId ?? "system",
+  });
+
+  return prisma.membership.findUnique({
+    where: { id: result.membership.id },
     include: { Plan: true, Member: { select: { id: true, name: true } } },
   });
-
-  await prisma.member.update({
-    where: { id: input.memberId },
-    data: { status: MemberStatus.ACTIVE, nextRenewalDate: end },
-  });
-
-  return membership;
 }
 
 export async function cancelMembershipForGym(
@@ -63,8 +62,8 @@ export async function cancelMembershipForGym(
     data: { endDate: end },
   });
 
-  await prisma.member.update({
-    where: { id: membership.memberId },
+  await prisma.member.updateMany({
+    where: { id: membership.memberId, gymId },
     data: { status: MemberStatus.EXPIRED, nextRenewalDate: end },
   });
 
