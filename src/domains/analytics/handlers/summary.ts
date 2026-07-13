@@ -5,6 +5,7 @@ import { cachedJson } from "@/lib/api-cache";
 import { prisma } from "@/lib/prisma";
 import { withCache } from "@/lib/redis";
 import { createLogger } from "@/lib/logger";
+import { endOfDayIST, toDateOnlyIST } from "@/lib/date-only";
 
 const logger = createLogger("api-analytics");
 
@@ -101,11 +102,8 @@ export async function analyticsSummaryHandler(request: NextRequest) {
       async () => {
         logger.info("Fetching analytics data", { startDate, endDate, metrics: metricsParam });
 
-        const start = new Date(startDate);
-        start.setHours(0, 0, 0, 0);
-        
-        const end = new Date(endDate);
-        end.setHours(23, 59, 59, 999);
+        const start = toDateOnlyIST(startDate);
+        const end = endOfDayIST(endDate);
 
         const daysDiff = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 

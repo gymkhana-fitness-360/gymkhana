@@ -1,9 +1,4 @@
-import {
-  isDevSelfHealEnabled,
-  isPlaygroundEnabled,
-  isDevelopersPortalEnabled,
-  isAgentApiEnabled,
-} from "@/lib/app-env";
+import { isDevSelfHealEnabled, isAgentApiEnabled } from "@/lib/app-env";
 
 describe("app-env feature flags", () => {
   const original = { ...process.env };
@@ -22,21 +17,13 @@ describe("app-env feature flags", () => {
     expect(isDevSelfHealEnabled()).toBe(process.env.NODE_ENV === "development");
   });
 
-  it("feature gates default off", () => {
-    delete process.env.ENABLE_PLAYGROUND;
-    delete process.env.ENABLE_DEVELOPERS_PORTAL;
+  it("isAgentApiEnabled defaults off", () => {
     delete process.env.ENABLE_AGENT_API;
-    expect(isPlaygroundEnabled()).toBe(false);
-    expect(isDevelopersPortalEnabled()).toBe(false);
     expect(isAgentApiEnabled()).toBe(false);
   });
 
-  it("feature gates turn on with env=true", () => {
-    process.env.ENABLE_PLAYGROUND = "true";
-    process.env.ENABLE_DEVELOPERS_PORTAL = "true";
+  it("isAgentApiEnabled turns on with env=true", () => {
     process.env.ENABLE_AGENT_API = "true";
-    expect(isPlaygroundEnabled()).toBe(true);
-    expect(isDevelopersPortalEnabled()).toBe(true);
     expect(isAgentApiEnabled()).toBe(true);
   });
 });

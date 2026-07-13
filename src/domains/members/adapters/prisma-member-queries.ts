@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { excludeTestUsers } from "@/lib/test-users";
+import { addDaysIST, endOfDayIST, todayIST } from "@/lib/date-only";
 import type { Member, MemberStatus, Prisma } from "@prisma/client";
 import type { IMemberQueries } from "../interfaces";
 import type {
@@ -105,39 +106,24 @@ export class PrismaMemberQueries implements IMemberQueries {
     }
 
     if (expiryFilter) {
-      const now = new Date();
-      const todayStart = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        0,
-        0,
-        0,
-        0
-      );
+      const todayStart = todayIST();
       if (expiryFilter === "expired_7") {
-        const from = new Date(todayStart);
-        from.setDate(from.getDate() - 7);
+        const from = addDaysIST(todayStart, -7);
         where.Membership = {
           some: { endDate: { gte: from, lt: todayStart } },
         };
       } else if (expiryFilter === "expired_30") {
-        const from = new Date(todayStart);
-        from.setDate(from.getDate() - 30);
+        const from = addDaysIST(todayStart, -30);
         where.Membership = {
           some: { endDate: { gte: from, lt: todayStart } },
         };
       } else if (expiryFilter === "expires_7") {
-        const to = new Date(todayStart);
-        to.setDate(to.getDate() + 7);
-        to.setHours(23, 59, 59, 999);
+        const to = endOfDayIST(addDaysIST(todayStart, 7));
         where.Membership = {
           some: { endDate: { gte: todayStart, lte: to } },
         };
       } else if (expiryFilter === "expires_30") {
-        const to = new Date(todayStart);
-        to.setDate(to.getDate() + 30);
-        to.setHours(23, 59, 59, 999);
+        const to = endOfDayIST(addDaysIST(todayStart, 30));
         where.Membership = {
           some: { endDate: { gte: todayStart, lte: to } },
         };

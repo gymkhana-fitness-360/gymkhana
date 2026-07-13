@@ -2,6 +2,7 @@ import { z } from "zod";
 
 /** Agent OAuth scopes — separate from dashboard Permission strings. */
 export const AGENT_SCOPES = [
+  "read:health",
   "read:overdue",
   "read:members",
   "read:payments",
@@ -29,6 +30,7 @@ export function agentHasAnyScope(granted: string[], required: AgentScope[]): boo
 
 /** Default scopes for new AGENT clients (read-only v1). */
 export const DEFAULT_AGENT_CLIENT_SCOPES: AgentScope[] = [
+  "read:health",
   "read:overdue",
   "read:members",
   "read:payments",

@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-
 import { z } from "zod";
 import { parseJsonBody } from "@/lib/security/parse-json-body";
 
-const mutatingBodySchema = z.any();
+const fixMemberExpirySchema = z
+  .object({
+    memberId: z.string().min(1).optional(),
+    recalculateAll: z.boolean().optional(),
+  })
+  .refine((d) => d.recalculateAll || d.memberId, {
+    message: "Provide memberId or recalculateAll: true",
+  });
+
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { toDateOnlyIST, addDaysIST } from "@/lib/date-only";
@@ -41,10 +48,9 @@ export async function fixMemberExpiryHandler(request: NextRequest) {
       return ApiErrors.badRequest("No gym selected or account has no locations.");
     }
 
-    const parsedBody = await parseJsonBody(request, mutatingBodySchema);
+    const parsedBody = await parseJsonBody(request, fixMemberExpirySchema);
     if (!parsedBody.ok) return parsedBody.response;
-    const body = parsedBody.data as any;
-    const { memberId, recalculateAll } = body;
+    const { memberId, recalculateAll } = parsedBody.data;
 
     if (recalculateAll) {
       // Recalculate all memberships based on their payments

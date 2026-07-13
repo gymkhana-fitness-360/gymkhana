@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { dateFromParts, endOfDayIST, todayIST, toDateOnlyIST } from "@/lib/date-only";
 import type { Payment, PaymentMethod, PaymentStatus, Prisma } from "@prisma/client";
 import { PaymentStatus as PaymentStatusEnum } from "@prisma/client";
 import { checkDuplicatePayment as libCheckDuplicatePayment } from "@/lib/services/payment.service";
@@ -118,9 +119,8 @@ export class PrismaPaymentQueries implements IPaymentQueries, IPaymentListQuerie
           select: { amount: true, receivedAt: true },
         }),
         (() => {
-          const startOf2023 = new Date("2023-01-01T00:00:00.000Z");
-          const today = new Date();
-          today.setHours(23, 59, 59, 999);
+          const startOf2023 = dateFromParts(2023, 1, 1);
+          const today = endOfDayIST(todayIST());
           return prisma.payment.aggregate({
             where: {
               gymId,
@@ -135,7 +135,7 @@ export class PrismaPaymentQueries implements IPaymentQueries, IPaymentListQuerie
 
     const collectionByYear: Record<string, { total: number; count: number }> = {};
     for (const payment of allCompletedPayments) {
-      const year = new Date(payment.receivedAt).getFullYear().toString();
+      const year = toDateOnlyIST(payment.receivedAt).getUTCFullYear().toString();
       if (!collectionByYear[year]) {
         collectionByYear[year] = { total: 0, count: 0 };
       }

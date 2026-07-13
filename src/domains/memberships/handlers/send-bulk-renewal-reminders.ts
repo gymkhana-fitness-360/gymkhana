@@ -5,11 +5,9 @@ import { getWhatsAppDirectMessaging } from "@/domains/communications/send-port";
 import { prisma } from "@/lib/prisma";
 import { ApiErrors } from "@/lib/api-handler";
 import { parseJsonBody } from "@/lib/security/parse-json-body";
-import { formatSimpleReminderMessage } from "@/lib/templates/reminder-simple";
-import { formatDate } from "@/lib/utils";
+import { buildRenewalReminderDraft } from "@/domains/memberships/renewal-reminder-draft";
 import { logAction } from "@/lib/audit-logger";
 import { recordCommunicationEvent } from "@/domains/communications/communication-ledger";
-import { toDateOnlyIST, daysFromTodayIST } from "@/lib/date-only";
 import { auth } from "@/lib/auth";
 
 const previewSchema = z.object({
@@ -47,27 +45,21 @@ export async function sendBulkRenewalRemindersHandler(
 
     const drafts = await Promise.all(
       memberships.map(async (membership) => {
-        const endDate = toDateOnlyIST(membership.endDate);
-        const daysUntil = -daysFromTodayIST(endDate);
-        const daysOverdue = daysUntil < 0 ? Math.abs(daysUntil) : undefined;
-        const phone = membership.Member.phone?.replace(/\D/g, "") || "";
-        const message = await formatSimpleReminderMessage({
-          name: membership.Member.name,
-          expiryDate: formatDate(membership.endDate),
-          daysLeft: daysUntil,
-          daysOverdue,
-          planName: membership.Plan?.name,
-          phoneNumber: phone,
+        const built = await buildRenewalReminderDraft({
           gymId,
+          memberName: membership.Member.name,
+          memberPhone: membership.Member.phone ?? "",
+          endDate: membership.endDate,
+          planName: membership.Plan?.name,
         });
         return {
           memberId: membership.Member.id,
           memberName: membership.Member.name,
           membershipId: membership.id,
-          phoneNumber: phone,
-          validPhone: phone.length >= 10,
-          message,
-          reminderType: daysOverdue ? "OVERDUE" : "RENEWAL",
+          phoneNumber: built.phone,
+          validPhone: built.validPhone,
+          message: built.message,
+          reminderType: built.reminderType,
         };
       }),
     );

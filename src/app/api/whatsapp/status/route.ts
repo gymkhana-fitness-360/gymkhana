@@ -1,41 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { isMetaWabaConfigured } from '@/lib/whatsapp/meta-cloud';
-import { createLogger } from "@/lib/logger";
-import { ApiErrors } from "@/lib/api-handler";
+import { NextRequest } from "next/server";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
-import {
-  WHATSAPP_NOT_CONFIGURED,
-  WHATSAPP_SETUP_HINT,
-} from "@/lib/messaging/whatsapp-copy";
-
-const logger = createLogger("api-whatsapp");
+import { whatsappStatusHandler } from "@/domains/communications/handlers/whatsapp-status";
 
 export async function GET(request: NextRequest) {
   const rl = withRateLimit(request, "lenient");
   if (rl) return rl;
-
-  try {
-    const session = await auth();
-    if (!session) {
-      return ApiErrors.unauthorized();
-    }
-
-    const configured = isMetaWabaConfigured();
-
-    return NextResponse.json({
-      success: true,
-      isAuthenticated: configured,
-      hasSession: configured,
-      provider: configured ? "meta_waba" : "none",
-      message: configured
-        ? "WhatsApp Business API is configured."
-        : `${WHATSAPP_NOT_CONFIGURED} ${WHATSAPP_SETUP_HINT}`,
-    });
-  } catch (error) {
-    logger.error('Error getting WhatsApp status:', error as Error);
-    return ApiErrors.internal(
-      error instanceof Error ? error.message : "Failed to get WhatsApp status"
-    );
-  }
+  return whatsappStatusHandler();
 }

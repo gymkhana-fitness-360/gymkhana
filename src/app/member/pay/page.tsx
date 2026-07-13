@@ -12,6 +12,7 @@ function MemberPayContent() {
   const params = useSearchParams();
   const memberId = params.get("memberId");
   const gymId = params.get("gymId");
+  const payToken = params.get("payToken");
   const demo = params.get("demo") === "1";
 
   const [phone, setPhone] = useState("");
@@ -46,8 +47,8 @@ function MemberPayContent() {
   };
 
   const payNow = async () => {
-    if (!memberId || !gymId) {
-      setError("Missing memberId or gymId in link");
+    if (!memberId || !gymId || !payToken) {
+      setError("Missing memberId, gymId, or payToken in link");
       return;
     }
     setLoading(true);
@@ -68,7 +69,7 @@ function MemberPayContent() {
       const res = await fetch("/api/public/member-pay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ gymId, memberId }),
+        body: JSON.stringify({ gymId, memberId, payToken }),
       });
       const json = await res.json();
       if (!res.ok) {
@@ -99,9 +100,9 @@ function MemberPayContent() {
         </p>
       )}
 
-      {!memberId || !gymId ? (
+      {!memberId || !gymId || !payToken ? (
         <p className="text-sm text-destructive">
-          Use the link from your gym: /member/pay?memberId=…&amp;gymId=…
+          Use the signed link from your gym: /member/pay?memberId=…&amp;gymId=…&amp;payToken=…
         </p>
       ) : (
         <>

@@ -7,7 +7,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { MemberStatus, Prisma } from "@prisma/client";
-import { todayIST } from "@/lib/date-only";
+import { todayIST, compareDateIST, toDateOnlyIST } from "@/lib/date-only";
 import { validateStateTransition } from "@/lib/state-machine";
 import { createLogger } from "@/lib/logger";
 
@@ -48,10 +48,9 @@ export async function updateMemberStatusIfExpired(
   }
 
   const today = todayIST();
-  const membershipEndDate = new Date(latestMembership.endDate);
-  membershipEndDate.setHours(0, 0, 0, 0);
+  const membershipEndDate = toDateOnlyIST(latestMembership.endDate);
 
-  if (membershipEndDate < today) {
+  if (compareDateIST(membershipEndDate, today) < 0) {
     const transition = validateStateTransition(member.status, MemberStatus.EXPIRED);
     
     if (transition.valid) {

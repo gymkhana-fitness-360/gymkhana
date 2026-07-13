@@ -1,51 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-
-import { z } from "zod";
-import { parseJsonBody } from "@/lib/security/parse-json-body";
-
-const mutatingBodySchema = z.object({}).passthrough();
-import { auth } from '@/lib/auth';
-import { isMetaWabaConfigured } from '@/lib/whatsapp/meta-cloud';
-import { createLogger } from "@/lib/logger";
-import { ApiErrors } from "@/lib/api-handler";
+import { NextRequest } from "next/server";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
-import {
-  WHATSAPP_NOT_CONFIGURED,
-  WHATSAPP_SETUP_HINT,
-} from "@/lib/messaging/whatsapp-copy";
-
-const logger = createLogger("api-whatsapp");
+import { whatsappInitializeHandler } from "@/domains/communications/handlers/whatsapp-initialize";
 
 export async function POST(request: NextRequest) {
   const rl = withRateLimit(request, "whatsappSession");
   if (rl) return rl;
-
-  try {
-    const session = await auth();
-    if (!session) {
-      return ApiErrors.unauthorized();
-    }
-
-    if (!isMetaWabaConfigured()) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: WHATSAPP_NOT_CONFIGURED,
-          message: WHATSAPP_SETUP_HINT,
-        },
-        { status: 503 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      isAuthenticated: true,
-      message: "WhatsApp Business API is configured and ready to send messages.",
-    });
-  } catch (error) {
-    logger.error('Error initializing WhatsApp:', error as Error);
-    return ApiErrors.internal(
-      error instanceof Error ? error.message : "Failed to verify WhatsApp Business API"
-    );
-  }
+  return whatsappInitializeHandler();
 }

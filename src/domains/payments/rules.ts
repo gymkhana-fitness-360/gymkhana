@@ -24,3 +24,58 @@ export const PAYMENT_RULES = Object.freeze({
     SOFT_DELETE: true,
   }),
 });
+
+export type ParsedPaymentNotes = {
+  raw: string;
+  hasDiscount: boolean;
+  isPersonalTrainer: boolean;
+  seasonalPackage: number | null;
+  combinedAmount: number | null;
+};
+
+/** PT / discount heuristics from payment notes (AUDIT-018 — keep out of JSX). */
+export function inferPaymentNotesMeta(
+  notes: string | null,
+  paymentAmount?: number,
+): ParsedPaymentNotes | null {
+  if (!notes) return null;
+
+  const notesLower = notes.toLowerCase();
+  const hasPTKeywords =
+    notesLower.includes("personal trainer") ||
+    notesLower.includes("pt") ||
+    notesLower.includes("trainer");
+
+  const combinedPattern = /(\d+)\s*\+\s*(\d+)/g;
+  const combinedMatches = notes.match(combinedPattern);
+  let hasPTAmount = false;
+  let totalCombinedAmount = 0;
+
+  if (combinedMatches) {
+    for (const match of combinedMatches) {
+      const parts = match.split("+").map((p) => parseFloat(p.trim()));
+      const sum = parts.reduce((a, b) => a + b, 0);
+      totalCombinedAmount = Math.max(totalCombinedAmount, sum);
+      if (sum >= 1800) hasPTAmount = true;
+    }
+  }
+
+  const isPTByAmount =
+    paymentAmount !== undefined &&
+    (paymentAmount >= 1800 || paymentAmount >= 4500);
+
+  const isPersonalTrainer = hasPTKeywords || hasPTAmount || isPTByAmount;
+  const hasDiscount =
+    notesLower.includes("friends") ||
+    notesLower.includes("family") ||
+    notesLower.includes("discount");
+  const seasonalMatch = notes.match(/(\d+)\s*months?/i);
+
+  return {
+    raw: notes,
+    hasDiscount,
+    isPersonalTrainer,
+    seasonalPackage: seasonalMatch ? parseInt(seasonalMatch[1], 10) : null,
+    combinedAmount: totalCombinedAmount > 0 ? totalCombinedAmount : null,
+  };
+}
