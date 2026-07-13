@@ -73,6 +73,8 @@
     "validate:db": "tsx scripts/validate-cli.ts --db",
     "validate:json": "tsx scripts/validate-cli.ts --json",
     "validate:verbose": "tsx scripts/validate-cli.ts --verbose",
+    "dev:validate": "node scripts/dev-validate.mjs",
+    "dev:validate:quick": "node scripts/dev-validate.mjs --quick",
     "test": "jest",
     "test:ci": "jest --testPathIgnorePatterns=\"api-e2e|payment-edge-cases|payment-workflows-integration|plan-inference|payment-dedupe-clustering|whatsapp-import\"",
     "test:watch": "jest --watch",
