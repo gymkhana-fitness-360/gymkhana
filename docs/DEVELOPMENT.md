@@ -1,93 +1,41 @@
-# Development guide
+# Development workflow
 
-Technical reference for running and changing the Fitness360 codebase. For contribution process (issues, PR etiquette), see [CONTRIBUTING.md](../CONTRIBUTING.md).
+## Validation gates
 
-## Setup
-
-See [README.md](../README.md) for quick start. Minimum local workflow:
+From the **product** repo root (`fitness360`):
 
 ```bash
-npm ci
-cp .env.example .env
-docker compose up -d postgres
-npx prisma generate
-npx prisma migrate deploy
+npm run dev:validate        # full completion gates (skills orchestrator)
+npm run dev:validate:quick  # typecheck + audits + lint only
+```
+
+`dev-validate.mjs` resolves the skills script in this order:
+
+1. `skills/scripts/validate.ts` (submodule or symlink)
+2. `../gymkhana-skills/scripts/validate.ts` (monorepo sibling)
+
+If neither exists, it runs the core product gates inline.
+
+Equivalent when the skills repo is checked out next to product:
+
+```bash
+npx tsx ../gymkhana-skills/scripts/validate.ts
+```
+
+## First-time setup
+
+```bash
+npm run fitness360:init   # local CLI — .env, postgres, migrate, seed
 npm run dev
 ```
 
-Or: `npx @fitness360/cli init --here`
+Do **not** use `npx @fitness360/cli` until the package is published; the in-repo CLI lives at `packages/cli`.
 
-Database env vars: [prisma/ENV.md](../prisma/ENV.md).
+## Individual audits
 
-## Project layout
-
-```
-src/app/api/     → HTTP routes (thin; delegate to domains)
-src/domains/     → business logic handlers and adapters
-  extensions/    → custom entities & custom analytics
-prisma/          → schema and migrations
-```
-
-Architecture overview: [docs/adr/001-modular-monolith-first.md](adr/001-modular-monolith-first.md)
-
-**Extensions (custom entities & analytics):** `src/domains/extensions/` — per-gym JSON schemas and saved metrics; APIs at `/api/custom-entities` and `/api/custom-analytics`. Member photos: `src/lib/member-avatar.ts`, `/api/members/photo`.
-
-Agent skill (Cursor / Claude): [gymkhana-skills](https://github.com/gymkhana-fitness-360/gymkhana-skills) — `npx skills add gymkhana-fitness-360/gymkhana-skills@dev -y`
-
-## Conventions
-
-| Area | Rule | ADR |
-|------|------|-----|
-| API routes | Thin handlers; logic in `src/domains/` | [001](adr/001-modular-monolith-first.md) |
-| Auth | Classify routes in `src/lib/security/api-auth-classes.ts` | [002](adr/002-api-auth-classes.md) |
-| Tenancy | Every tenant query filters by `gymId` | [003](adr/003-mandatory-gym-id.md) |
-
-Do not add marketing, playground, or `/developers` UI to this repo — those belong in gymkhana-cloud.
-
-## Checks before a PR
-
-```bash
-npm run typecheck
-npm run lint
-npm run test:ci
-npm run build
-```
-
-If you changed API routes or handlers:
-
-```bash
-npm run audit:api-routes
-npm run audit:mutating-zod
-npm run audit:tenant-scope
-```
-
-**Merge via pull request only** — see [BRANCH_POLICY.md](BRANCH_POLICY.md). CI must pass on the PR before merge.
-
-If you changed public HTTP APIs:
-
-```bash
-npm run openapi:generate
-# commit openapi/openapi.json when the spec changes
-```
-
-## Releases
-
-- **[CHANGELOG.md](../CHANGELOG.md)** — version history (Keep a Changelog).
-- **[docs/FEATURE_PARITY.md](FEATURE_PARITY.md)** — dashboard vs API vs MCP matrix.
-- **[docs/releases/](releases/)** — per-version notes for GitHub Releases.
-- Live portal: `www.gymkhana.fit/developers#releases` and `www.gymkhana.fit/docs/updates` (gymkhana-cloud).
-
-Bump `package.json` version, update `CHANGELOG.md`, `docs/releases/vX.Y.Z.md`, and cloud `src/data/releases/releases.ts` when shipping.
-
-## Optional: agent / MCP
-
-Set `ENABLE_AGENT_API=true` in `.env`. See `.env.example` for AI and MCP variables.
-
-```bash
-npm run mcp:setup
-npm run mcp:server   # requires app on :3000
-```
-
-## API spec
-
-[openapi/openapi.json](../openapi/openapi.json) — regenerate with `npm run openapi:generate`.
+| Command | Purpose |
+|---------|---------|
+| `npm run audit:tenant-scope:p0` | Block cross-tenant P0 routes |
+| `npm run audit:mutating-zod` | Zod on mutating API bodies |
+| `npm run test:ci` | CI-safe unit tests |
+| `npm run openapi:generate` | Regenerate `openapi/openapi.json` |
