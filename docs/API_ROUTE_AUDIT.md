@@ -3,7 +3,7 @@
 Auto-generated route inventory (`npm run audit:api-routes`). Regenerate after API changes.
 
 **Generated:** 2026-07-13  
-**Routes:** 169 · **Migrated:** 79 · **Partial:** 26 · **Direct Prisma:** 64
+**Routes:** 169 · **Migrated:** 80 · **Partial:** 29 · **Direct Prisma:** 60
 
 Regenerate: `npm run audit:api-routes`
 
@@ -81,7 +81,7 @@ Regenerate: `npm run audit:api-routes`
 | `/api/free-trial-visits/[id]` | platform | no | yes | migrated |
 | `/api/goals` | platform | no | yes | migrated |
 | `/api/gym-context` | tenancy | no | no | direct-prisma |
-| `/api/gym/profile` | platform | yes | no | direct-prisma |
+| `/api/gym/profile` | platform | yes | yes | partial |
 | `/api/gyms` | tenancy | no | no | direct-prisma |
 | `/api/health` | platform | yes | no | direct-prisma |
 | `/api/health/errors` | platform | no | no | direct-prisma |
@@ -148,14 +148,14 @@ Regenerate: `npm run audit:api-routes`
 | `/api/salaries` | finance | yes | no | direct-prisma |
 | `/api/salaries/[id]` | finance | yes | yes | partial |
 | `/api/services` | platform | yes | no | direct-prisma |
-| `/api/settings` | admin | yes | no | direct-prisma |
+| `/api/settings` | admin | no | yes | migrated |
 | `/api/settings/agent-clients` | admin | no | no | direct-prisma |
 | `/api/settings/agent-clients/[clientId]` | admin | no | no | direct-prisma |
 | `/api/settings/agent-clients/[clientId]/token` | admin | no | no | direct-prisma |
 | `/api/settings/agent-clients/connect` | admin | no | no | direct-prisma |
 | `/api/settings/agent-clients/test` | admin | no | no | direct-prisma |
-| `/api/settings/notifications` | admin | yes | no | direct-prisma |
-| `/api/settings/session` | admin | yes | no | direct-prisma |
+| `/api/settings/notifications` | admin | yes | yes | partial |
+| `/api/settings/session` | admin | yes | yes | partial |
 | `/api/settings/whatsapp-lifecycle-templates` | admin | no | yes | migrated |
 | `/api/trainers/commissions` | trainers | yes | yes | partial |
 | `/api/trainers/leaderboard` | trainers | no | yes | migrated |
