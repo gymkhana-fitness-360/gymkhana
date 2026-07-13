@@ -54,6 +54,41 @@ jobs:
           DIRECT_DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
           CRON_SECRET: ci-placeholder-cron-secret
 
+  payment-integration:
+    name: Payment integration tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: gymkhana_payments_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_payments_ci
+      DIRECT_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gymkhana_payments_ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npx prisma migrate deploy
+      - name: Payment edge-case suites
+        run: |
+          npm test -- --testPathPatterns="payment-edge-cases|payment-workflows-integration|payment-dedupe-clustering"
+        env:
+          CRON_SECRET: ci-placeholder-cron-secret-min-32-chars!!
+
       - name: Typecheck
         run: npx tsc --noEmit
         env:
