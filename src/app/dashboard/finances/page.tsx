@@ -14,6 +14,12 @@ import { SelectNative } from "@/components/ui/select-native";
 import { CheckboxInput } from "@/components/ui/checkbox-input";
 import { useActionQueue } from "@/hooks/use-action-queue";
 import { toast } from "sonner";
+import {
+  type FinancesEmployee,
+  type FinancesExpense,
+  type FinancesSalary,
+} from "@/components/dashboard/finances/finances-types";
+import { useFinancesData } from "@/hooks/use-finances-data";
 
 const logger = createLogger("dashboard-finances");
 import {
@@ -33,61 +39,38 @@ import {
   Loader2,
 } from "lucide-react";
 
-interface Salary {
-  id: string;
-  amount: string;
-  paymentDate: string;
-  month: number;
-  year: number;
-  method: PaymentMethod;
-  reference: string | null;
-  notes: string | null;
-  employee: {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-  };
-  paidBy: {
-    id: string;
-    name: string;
-  };
-}
-
-interface Expense {
-  id: string;
-  description: string;
-  category: ExpenseCategory;
-  type: ExpenseType;
-  amount: string;
-  paymentDate: string;
-  method: PaymentMethod;
-  vendor: string | null;
-  reference: string | null;
-  notes: string | null;
-  nextDueDate: string | null;
-  status: ExpenseStatus;
-  recordedBy: {
-    id: string;
-    name: string;
-  };
-}
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
+interface Salary extends FinancesSalary {}
+interface Expense extends FinancesExpense {}
+interface User extends FinancesEmployee {}
 
 export default function FinancesPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const [activeTab, setActiveTab] = useState<"salaries" | "expenses">("salaries");
-  const [salaries, setSalaries] = useState<Salary[]>([]);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [employees, setEmployees] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [salaryFilters, setSalaryFilters] = useState({
+    employeeId: "",
+    year: "",
+    month: "",
+    startDate: "",
+    endDate: "",
+  });
+  const [expenseFilters, setExpenseFilters] = useState({
+    category: "" as ExpenseCategory | "",
+    type: "" as ExpenseType | "",
+    status: "" as ExpenseStatus | "",
+    search: "",
+    startDate: "",
+    endDate: "",
+  });
+  const {
+    salaries,
+    expenses,
+    employees,
+    loading,
+    fetchEmployees,
+    fetchSalaries,
+    fetchExpenses,
+  } = useFinancesData(salaryFilters, expenseFilters);
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState<Salary | Expense | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -124,24 +107,7 @@ export default function FinancesPage() {
   });
 
   // Filters
-  const [salaryFilters, setSalaryFilters] = useState({
-    employeeId: "",
-    year: "",
-    month: "",
-    startDate: "",
-    endDate: "",
-  });
-
   const [markingPaidId, setMarkingPaidId] = useState<string | null>(null);
-
-  const [expenseFilters, setExpenseFilters] = useState({
-    category: "" as ExpenseCategory | "",
-    type: "" as ExpenseType | "",
-    status: "" as ExpenseStatus | "",
-    search: "",
-    startDate: "",
-    endDate: "",
-  });
 
   useEffect(() => {
     fetchEmployees();
@@ -150,7 +116,7 @@ export default function FinancesPage() {
     } else {
       fetchExpenses();
     }
-  }, [activeTab]);
+  }, [activeTab, fetchEmployees, fetchSalaries, fetchExpenses]);
 
   useEffect(() => {
     if (activeTab === "salaries") {
@@ -158,66 +124,7 @@ export default function FinancesPage() {
     } else {
       fetchExpenses();
     }
-  }, [salaryFilters, expenseFilters]);
-
-  const fetchEmployees = async () => {
-    try {
-      const response = await fetch("/api/users");
-      if (response.ok) {
-        const data = await response.json();
-        setEmployees(data);
-      }
-    } catch (error) {
-      logger.error("Error fetching employees:", error as Error);
-    }
-  };
-
-  const fetchSalaries = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (salaryFilters.employeeId) params.append("employeeId", salaryFilters.employeeId);
-      if (salaryFilters.year) params.append("year", salaryFilters.year);
-      if (salaryFilters.month) params.append("month", salaryFilters.month);
-      if (salaryFilters.startDate) params.append("startDate", salaryFilters.startDate);
-      if (salaryFilters.endDate) params.append("endDate", salaryFilters.endDate);
-
-      const response = await fetch(`/api/salaries?${params}`);
-      const data = await response.json();
-      // Ensure we always set an array
-      const salariesArray = Array.isArray(data.salaries) ? data.salaries : Array.isArray(data) ? data : [];
-      setSalaries(salariesArray);
-    } catch (error) {
-      logger.error("Error fetching salaries:", error as Error);
-      setSalaries([]); // Set empty array on error
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchExpenses = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (expenseFilters.category) params.append("category", expenseFilters.category);
-      if (expenseFilters.type) params.append("type", expenseFilters.type);
-      if (expenseFilters.status) params.append("status", expenseFilters.status);
-      if (expenseFilters.search) params.append("search", expenseFilters.search);
-      if (expenseFilters.startDate) params.append("startDate", expenseFilters.startDate);
-      if (expenseFilters.endDate) params.append("endDate", expenseFilters.endDate);
-
-      const response = await fetch(`/api/expenses?${params}`);
-      const data = await response.json();
-      // Ensure we always set an array
-      const expensesArray = Array.isArray(data.expenses) ? data.expenses : Array.isArray(data) ? data : [];
-      setExpenses(expensesArray);
-    } catch (error) {
-      logger.error("Error fetching expenses:", error as Error);
-      setExpenses([]); // Set empty array on error
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [salaryFilters, expenseFilters, activeTab, fetchSalaries, fetchExpenses]);
 
   const handleOpenSalaryForm = (salary?: Salary) => {
     if (salary) {
