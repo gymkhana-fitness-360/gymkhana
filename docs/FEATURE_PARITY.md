@@ -17,6 +17,7 @@ What is available in the **dashboard**, via **REST API**, through **MCP agent to
 | WhatsApp reminders & campaigns | ✅ | ✅ | ✅ | ✅ | Requires Meta WABA |
 | Leads & follow-ups | ✅ | ✅ | — | ✅ | |
 | Marketplace installs | ✅ | Partial | — | ✅ | |
+| Operator documentation (www) | ✅ | — | — | ✅ | Guides at gymkhana.fit/docs |
 | Agent / MCP tools | ✅ | ✅ | ✅ | ✅ | Settings → AI & MCP |
 | Public REST v1 | — | Preview | — | ✅ | `x-api-key` |
 | Outbound webhooks | Planned | Planned | — | Planned | In progress |
