@@ -2,11 +2,14 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
-  fullyParallel: true,
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  timeout: 30_000,
+  globalTimeout: process.env.CI ? 600_000 : undefined,
+  expect: { timeout: 10_000 },
+  reporter: process.env.CI ? 'github' : 'html',
   use: {
     // Prefer explicit BASE_URL (e.g. Vercel). Default matches webServer so local `npm run test:e2e` works.
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
@@ -22,9 +25,10 @@ export default defineConfig({
   ],
 
   webServer: process.env.BASE_URL ? undefined : {
-    command: process.env.CI ? 'npm run start' : 'npm run dev',
-    url: 'http://localhost:3000',
+    command: "npm run dev",
+    url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
     env: {
       ...process.env,
       // Local dev only — production `next start` (CI) must not enable demo auto-link.
