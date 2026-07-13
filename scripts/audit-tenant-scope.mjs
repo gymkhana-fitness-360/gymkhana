@@ -16,6 +16,8 @@ const SCOPED_HELPERS = [
   "userCanAccessGym",
   "memberBelongsToGym",
   "detectOverdueMembers",
+  "markStaleOverdueInactiveForGym",
+  "resolveOverdueOnPayment",
 ];
 const PRISMA_READ = /prisma\.\w+\.(findMany|findFirst|findUnique|groupBy)\s*\(/g;
 
@@ -64,11 +66,15 @@ function auditFile(filePath) {
   return findings;
 }
 
-/** Routes that must not appear in audit output (GYM-OS-A-001). */
+/** Routes and domain files that must stay gym-scoped (AUDIT-027). */
 const P0_ROUTE_FILES = [
   "src/app/api/payments/deduplicate/route.ts",
   "src/app/api/payments/fix-missing-memberships/route.ts",
   "src/app/api/members/fix-date/route.ts",
+  "src/app/api/settings/route.ts",
+  "src/app/api/audit/route.ts",
+  "src/domains/collections/services/overdue.service.ts",
+  "src/domains/collections/handlers/mark-stale-overdue-inactive.ts",
 ];
 
 const allFindings = walk(SRC).flatMap(auditFile);

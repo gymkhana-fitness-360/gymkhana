@@ -270,6 +270,7 @@ export async function createPayment(
 
     // Log action asynchronously without blocking (fire and forget)
     logAction(userId, "payment_created", "Payment", payment.id, {
+      gymId,
       memberId,
       amount,
       paymentMethod,
@@ -290,7 +291,7 @@ export async function createPayment(
     // Queue for after transaction commits using setImmediate
     if (!recordOnly && BUSINESS_RULES.PAYMENT.AUTO_RESOLVE_OVERDUE) {
       setImmediate(() => {
-        resolveOverdueOnPayment(memberId).catch((error) => {
+        resolveOverdueOnPayment(memberId, gymId).catch((error) => {
           logger.error(
             `[PAYMENT] Failed to resolve overdue for member ${memberId} after external tx`,
             error instanceof Error ? error : new Error(String(error))
@@ -308,7 +309,7 @@ export async function createPayment(
 
   // Resolve overdue asynchronously without blocking response
   if (!recordOnly && BUSINESS_RULES.PAYMENT.AUTO_RESOLVE_OVERDUE) {
-    resolveOverdueOnPayment(memberId).catch((err) => 
+    resolveOverdueOnPayment(memberId, gymId).catch((err) =>
       logger.error("Overdue resolution error:", err)
     );
   }

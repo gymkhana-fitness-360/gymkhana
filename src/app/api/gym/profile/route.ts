@@ -9,6 +9,7 @@ import {
 import { withRateLimit } from "@/lib/middleware/rate-limit";
 import { ApiErrors } from "@/lib/api-handler";
 import { parseJsonBody } from "@/lib/security/parse-json-body";
+import { gymKeyWhere } from "@/domains/platform/settings/service";
 import {
   billCodePrefixKey,
   chargeAdmissionFeeKey,
@@ -58,7 +59,7 @@ export async function GET(request: NextRequest) {
     chargeDiscountPresetsKey(gymId),
   ];
   const settings = await prisma.setting.findMany({
-    where: { key: { in: keys } },
+    where: { gymId, key: { in: keys } },
   });
   const map = Object.fromEntries(settings.map((s) => [s.key, s.value]));
 
@@ -144,8 +145,8 @@ export async function PUT(request: NextRequest) {
 
   for (const { key, value } of settingUpserts) {
     await prisma.setting.upsert({
-      where: { key },
-      create: { key, value },
+      where: gymKeyWhere(gymId, key),
+      create: { gymId, key, value },
       update: { value },
     });
   }

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { gymKeyWhere } from "@/domains/platform/settings/service";
 import { buildAttendanceHeatmap } from "./attendance-heatmap";
 
 const SETTING_PREFIX = "gym_operating_hours:";
@@ -23,8 +24,9 @@ export async function refreshOperatingHoursFact(gymId: string): Promise<Operatin
 
   const key = `${SETTING_PREFIX}${gymId}`;
   await prisma.setting.upsert({
-    where: { key },
+    where: gymKeyWhere(gymId, key),
     create: {
+      gymId,
       key,
       value: JSON.stringify(fact),
       description: "Peak/quiet hours from attendance heatmap (nightly)",
@@ -38,8 +40,9 @@ export async function refreshOperatingHoursFact(gymId: string): Promise<Operatin
 export async function getOperatingHoursFact(
   gymId: string,
 ): Promise<OperatingHoursFact | null> {
+  const key = `${SETTING_PREFIX}${gymId}`;
   const row = await prisma.setting.findUnique({
-    where: { key: `${SETTING_PREFIX}${gymId}` },
+    where: gymKeyWhere(gymId, key),
   });
   if (!row) return null;
   try {

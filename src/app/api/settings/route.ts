@@ -1,33 +1,34 @@
 import { NextRequest } from "next/server";
-
 import { z } from "zod";
 import { parseJsonBody } from "@/lib/security/parse-json-body";
-
-const mutatingBodySchema = z.any();
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
 import { createLogger } from "@/lib/logger";
 import { ApiErrors } from "@/lib/api-handler";
 import { successResponse } from "@/lib/api-response";
+import { requireApiGymId } from "@/lib/api/gym-context";
+import {
+  filterAllowedSettingKeys,
+  listGymSettings,
+  PUBLIC_SETTINGS_KEYS,
+  upsertGymSettings,
+} from "@/domains/platform/settings/service";
 
 const logger = createLogger("api-settings");
 
-// Public settings that any authenticated user can read
-const PUBLIC_SETTINGS_KEYS = [
-  "sessionTimeoutMinutes",
-  "reminderSmsEnabled",
-  "reminderWhatsappEnabled",
-  "defaultReminderDays",
-  "maxReminderDays",
-  "minReminderDays",
-];
+const mutatingBodySchema = z.union([
+  z.object({
+    key: z.string().min(1),
+    value: z.string(),
+  }),
+  z.object({
+    settings: z.record(z.string(), z.string()),
+  }),
+]);
 
 /**
  * GET /api/settings?keys=key1,key2
- * Returns settings by keys.
- * Non-admin users can only access PUBLIC_SETTINGS_KEYS.
- * Admin can access all settings.
+ * Returns settings by keys for the active gym.
  */
 export async function GET(request: NextRequest) {
   const rl = withRateLimit(request, "lenient");
@@ -39,37 +40,28 @@ export async function GET(request: NextRequest) {
       return ApiErrors.unauthorized();
     }
 
+    const gymId = await requireApiGymId(session, request);
+    if (gymId instanceof Response) return gymId;
+
     const isAdmin = session.user.role === "ADMIN";
     const keysParam = request.nextUrl.searchParams.get("keys");
     let requestedKeys = keysParam ? keysParam.split(",").map((k) => k.trim()) : [];
 
-    // Non-admins can only access public settings
     if (!isAdmin) {
-      if (requestedKeys.length === 0) {
-        // If no keys specified, only return public settings
-        requestedKeys = PUBLIC_SETTINGS_KEYS;
-      } else {
-        // Filter to only public keys
-        requestedKeys = requestedKeys.filter((k) => PUBLIC_SETTINGS_KEYS.includes(k));
-      }
+      requestedKeys =
+        requestedKeys.length === 0
+          ? [...PUBLIC_SETTINGS_KEYS]
+          : filterAllowedSettingKeys(requestedKeys, false);
     }
 
-    // If no keys to fetch (non-admin requested only sensitive keys)
     if (requestedKeys.length === 0 && !isAdmin) {
       return successResponse({});
     }
 
-    const whereClause = requestedKeys.length > 0 
-      ? { key: { in: requestedKeys } }
-      : undefined;
-
-    const settings = await prisma.setting.findMany({
-      where: whereClause,
-      orderBy: { key: "asc" },
-    });
-
-    const result: Record<string, string> = {};
-    for (const s of settings) result[s.key] = s.value;
+    const result = await listGymSettings(
+      gymId,
+      requestedKeys.length > 0 ? requestedKeys : undefined,
+    );
     return successResponse(result);
   } catch (error) {
     logger.error("Settings GET error:", error as Error);
@@ -95,16 +87,19 @@ export async function PUT(request: NextRequest) {
       return ApiErrors.forbidden("Admin access required");
     }
 
+    const gymId = await requireApiGymId(session, request);
+    if (gymId instanceof Response) return gymId;
+
     const parsedBody = await parseJsonBody(request, mutatingBodySchema);
     if (!parsedBody.ok) return parsedBody.response;
-    const body = parsedBody.data as any;
-    const updates: Array<{ key: string; value: string }> = [];
+    const body = parsedBody.data;
 
-    if (body.settings && typeof body.settings === "object") {
+    const updates: Array<{ key: string; value: string }> = [];
+    if ("settings" in body) {
       for (const [k, v] of Object.entries(body.settings)) {
-        if (typeof v === "string") updates.push({ key: k, value: v });
+        updates.push({ key: k, value: v });
       }
-    } else if (body.key && typeof body.value === "string") {
+    } else {
       updates.push({ key: body.key, value: body.value });
     }
 
@@ -112,14 +107,7 @@ export async function PUT(request: NextRequest) {
       return ApiErrors.validationError("Provide key/value or settings object");
     }
 
-    for (const { key, value } of updates) {
-      await prisma.setting.upsert({
-        where: { key },
-        create: { key, value },
-        update: { value },
-      });
-    }
-
+    await upsertGymSettings(gymId, updates);
     return successResponse({ updated: true });
   } catch (error) {
     logger.error("Settings PUT error:", error as Error);

@@ -5,12 +5,13 @@ import { prisma } from "@/lib/prisma";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
 import { createLogger } from "@/lib/logger";
 import { ApiErrors } from "@/lib/api-handler";
+import { requireApiGymId } from "@/lib/api/gym-context";
 
 const logger = createLogger("api-audit");
 
 /**
  * GET /api/audit
- * Fetch action logs for signed-in user. Admin sees all.
+ * Fetch action logs for the active gym.
  */
 export async function GET(request: NextRequest) {
   const rl = withRateLimit(request, "lenient");
@@ -22,12 +23,15 @@ export async function GET(request: NextRequest) {
       return ApiErrors.unauthorized();
     }
 
+    const gymId = await requireApiGymId(session, request);
+    if (gymId instanceof NextResponse) return gymId;
+
     const { searchParams } = new URL(request.url);
     const limit = Math.min(parseInt(searchParams.get("limit") || "100", 10), 500);
     const offset = parseInt(searchParams.get("offset") || "0", 10);
     const action = searchParams.get("action");
 
-    const where: { userId?: string; action?: string } = {};
+    const where: { gymId: string; userId?: string; action?: string } = { gymId };
     if (session.user.role !== "ADMIN") {
       where.userId = session.user.id;
     }

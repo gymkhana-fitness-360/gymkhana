@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { gymKeyWhere } from "@/domains/platform/settings/service";
 import { PaymentStatus } from "@prisma/client";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
 import { createLogger } from "@/lib/logger";
@@ -37,7 +38,7 @@ export async function paymentSentStatusHandler(request: NextRequest) {
     let cutoffDate: Date;
     const settingKey = `bills_sent_cutoff_date:${gymId}`;
     const cutoffSetting = await prisma.setting.findUnique({
-      where: { key: settingKey },
+      where: gymKeyWhere(gymId, settingKey),
     });
     if (cutoffSetting?.value) {
       cutoffDate = new Date(cutoffSetting.value);
