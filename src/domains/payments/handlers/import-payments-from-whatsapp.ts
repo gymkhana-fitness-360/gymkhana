@@ -99,7 +99,7 @@ export async function importPaymentsFromWhatsAppHandler(request: NextRequest) {
           dateToUse.toISOString().slice(0, 10),
           pm.lineNumber.toString()
         );
-        const { alreadyProcessed } = await ensurePaymentProcessedOnce(idempotencyKey);
+        const { alreadyProcessed } = await ensurePaymentProcessedOnce(gymId, idempotencyKey);
         if (alreadyProcessed) {
           results.skipped++;
           continue;
@@ -121,7 +121,7 @@ export async function importPaymentsFromWhatsAppHandler(request: NextRequest) {
         });
 
         if (!result.isDuplicate) {
-          await markPaymentProcessed(idempotencyKey, result.payment.id);
+          await markPaymentProcessed(gymId, idempotencyKey, result.payment.id);
           results.created++;
         } else {
           results.skipped++;

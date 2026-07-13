@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { gymKeyWhere } from "@/domains/platform/settings/service";
 import {
   chargeAdmissionFeeKey,
   chargeDiscountPresetsKey,
@@ -17,16 +18,18 @@ const DEFAULT_POLICY: ChargePolicy = {
   discountPresets: [],
 };
 
-async function readGymSetting(key: string): Promise<string | null> {
-  const row = await prisma.setting.findUnique({ where: { key } });
+async function readGymSetting(gymId: string, key: string): Promise<string | null> {
+  const row = await prisma.setting.findUnique({
+    where: gymKeyWhere(gymId, key),
+  });
   return row?.value ?? null;
 }
 
 export async function getChargePolicy(gymId: string): Promise<ChargePolicy> {
   const [admissionRaw, taxRaw, presetsRaw] = await Promise.all([
-    readGymSetting(chargeAdmissionFeeKey(gymId)),
-    readGymSetting(chargeTaxPercentKey(gymId)),
-    readGymSetting(chargeDiscountPresetsKey(gymId)),
+    readGymSetting(gymId, chargeAdmissionFeeKey(gymId)),
+    readGymSetting(gymId, chargeTaxPercentKey(gymId)),
+    readGymSetting(gymId, chargeDiscountPresetsKey(gymId)),
   ]);
 
   const admissionFee = admissionRaw ? parseFloat(admissionRaw) : DEFAULT_POLICY.admissionFee;

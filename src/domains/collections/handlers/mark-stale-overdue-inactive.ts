@@ -1,17 +1,18 @@
 /**
- * Mark overdue tracking rows inactive when member has not attended for 7+ days.
+ * Mark overdue tracking rows inactive when member has not attended for 7+ days (per gym).
  */
 import { prisma } from "@/lib/prisma";
 import { createLogger } from "@/lib/logger";
+import { addDaysIST, todayIST } from "@/lib/date-only";
 
 const logger = createLogger("collections-overdue-inactive");
 
-export async function markStaleOverdueInactive() {
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+export async function markStaleOverdueInactiveForGym(gymId: string) {
+  const sevenDaysAgo = addDaysIST(todayIST(), -7);
 
   const toMarkInactive = await prisma.overdueTracking.findMany({
     where: {
+      gymId,
       lastSeenAt: { lte: sevenDaysAgo },
       markedInactiveAt: null,
       resolvedAt: null,
@@ -23,6 +24,7 @@ export async function markStaleOverdueInactive() {
 
   const neverSeen = await prisma.overdueTracking.findMany({
     where: {
+      gymId,
       detectedAt: { lte: sevenDaysAgo },
       lastSeenAt: null,
       markedInactiveAt: null,
@@ -51,6 +53,7 @@ export async function markStaleOverdueInactive() {
   if (updated.length > 0) {
     await prisma.auditLog.create({
       data: {
+        gymId,
         userId: "system",
         action: "overdue_auto_cleanup",
         entityType: "OverdueTracking",
@@ -68,7 +71,7 @@ export async function markStaleOverdueInactive() {
     });
   }
 
-  logger.info("markStaleOverdueInactive", { markedInactive: updated.length });
+  logger.info("markStaleOverdueInactiveForGym", { gymId, markedInactive: updated.length });
 
   return {
     markedInactive: updated.length,
@@ -78,4 +81,19 @@ export async function markStaleOverdueInactive() {
       month: r.month,
     })),
   };
+}
+
+/** Platform cron: run stale overdue cleanup for every gym. */
+export async function markStaleOverdueInactive() {
+  const gyms = await prisma.gym.findMany({ select: { id: true } });
+  let markedInactive = 0;
+  const members: Array<{ id: string; name: string; month: string }> = [];
+
+  for (const gym of gyms) {
+    const result = await markStaleOverdueInactiveForGym(gym.id);
+    markedInactive += result.markedInactive;
+    members.push(...result.members);
+  }
+
+  return { markedInactive, members };
 }

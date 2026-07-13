@@ -46,23 +46,30 @@ export async function runUpdateMembershipStatusTask(): Promise<CronJobResult> {
   });
 }
 
-/** Resolve overdue tracking rows older than 30 days where member is EXPIRED. */
+/** Resolve overdue tracking rows older than 30 days where member is EXPIRED (per gym). */
 export async function runResolveExpiredOverdueTask(): Promise<CronJobResult> {
   return runTask("resolve-expired-overdue", async () => {
     const today = todayIST();
     const thirtyDaysAgo = new Date(today);
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    const resolved = await prisma.overdueTracking.updateMany({
-      where: {
-        resolvedAt: null,
-        detectedAt: { lt: thirtyDaysAgo },
-        Member: { status: MemberStatus.EXPIRED },
-      },
-      data: { resolvedAt: today },
-    });
+    const gyms = await prisma.gym.findMany({ select: { id: true } });
+    let recordsResolved = 0;
 
-    return { recordsResolved: resolved.count };
+    for (const gym of gyms) {
+      const resolved = await prisma.overdueTracking.updateMany({
+        where: {
+          gymId: gym.id,
+          resolvedAt: null,
+          detectedAt: { lt: thirtyDaysAgo },
+          Member: { status: MemberStatus.EXPIRED, gymId: gym.id },
+        },
+        data: { resolvedAt: today },
+      });
+      recordsResolved += resolved.count;
+    }
+
+    return { recordsResolved, gyms: gyms.length };
   });
 }
 

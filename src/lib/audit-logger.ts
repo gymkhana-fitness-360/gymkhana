@@ -87,9 +87,10 @@ export async function logStatusChange(
 /**
  * Get audit trail for a member
  */
-export async function getMemberAuditTrail(memberId: string) {
+export async function getMemberAuditTrail(memberId: string, gymId: string) {
   return prisma.auditLog.findMany({
     where: {
+      gymId,
       OR: [
         { entityType: "Member", entityId: memberId },
         { entityType: "Membership", details: { path: ["memberId"], equals: memberId } },
@@ -101,11 +102,9 @@ export async function getMemberAuditTrail(memberId: string) {
   });
 }
 
-/**
- * Get recent audit logs (last 100)
- */
-export async function getRecentAuditLogs(limit: number = 100) {
+export async function getRecentAuditLogs(gymId: string, limit: number = 100) {
   return prisma.auditLog.findMany({
+    where: { gymId },
     take: limit,
     orderBy: { createdAt: "desc" },
     include: { User: { select: { name: true, contactNumber: true } } },

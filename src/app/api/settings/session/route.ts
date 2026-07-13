@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { ApiErrors } from "@/lib/api-handler";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
 import { createLogger } from "@/lib/logger";
+import { gymKeyWhere } from "@/domains/platform/settings/service";
 import {
   readRequestedGymIdFromRequest,
   resolveGymIdForUser,
@@ -23,7 +24,8 @@ const DEFAULT_TIMEOUT = "240";
 const sessionKey = (gymId: string) => `session_timeout_minutes:${gymId}`;
 
 async function getSessionSettings(gymId: string) {
-  const row = await prisma.setting.findUnique({ where: { key: sessionKey(gymId) } });
+  const key = sessionKey(gymId);
+  const row = await prisma.setting.findUnique({ where: gymKeyWhere(gymId, key) });
   return { timeoutMinutes: parseInt(row?.value ?? DEFAULT_TIMEOUT, 10) };
 }
 
@@ -91,8 +93,8 @@ export async function PUT(request: NextRequest) {
       const key = sessionKey(gymId);
       const value = String(Math.min(10080, body.timeoutMinutes)); // max 7 days
       await prisma.setting.upsert({
-        where: { key },
-        create: { key, value },
+        where: gymKeyWhere(gymId, key),
+        create: { gymId, key, value },
         update: { value },
       });
     }

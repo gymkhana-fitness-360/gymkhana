@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
 import { createLogger } from "@/lib/logger";
 import { ApiErrors } from "@/lib/api-handler";
+import { gymKeyWhere } from "@/domains/platform/settings/service";
 import {
   readRequestedGymIdFromRequest,
   resolveGymIdForUser,
@@ -43,7 +44,10 @@ const scopedKey = (base: string, gymId: string) => `${base}:${gymId}`;
 
 async function getNotificationSettings(gymId: string) {
   const settings = await prisma.setting.findMany({
-    where: { key: { in: BASE_KEYS.map((k) => scopedKey(k, gymId)) } },
+    where: {
+      gymId,
+      key: { in: BASE_KEYS.map((k) => scopedKey(k, gymId)) },
+    },
   });
   const map = Object.fromEntries(settings.map((s) => [s.key, s.value]));
   const get = (base: keyof typeof DEFAULTS) => map[scopedKey(base, gymId)] ?? DEFAULTS[base];
@@ -148,8 +152,8 @@ export async function PUT(request: NextRequest) {
     for (const { key, value } of updates) {
       const k = scopedKey(key, gymId);
       await prisma.setting.upsert({
-        where: { key: k },
-        create: { key: k, value },
+        where: gymKeyWhere(gymId, k),
+        create: { gymId, key: k, value },
         update: { value },
       });
     }

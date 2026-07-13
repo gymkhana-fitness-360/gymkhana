@@ -1,26 +1,21 @@
+/**
+ * AUDIT-003: Resolve overdue tracking when payment is received (gym-scoped).
+ */
 import { prisma } from "@/lib/prisma";
 import { MemberStatus } from "@prisma/client";
 import { createLogger } from "@/lib/logger";
 import { todayIST, addDaysIST } from "@/lib/date-only";
+import { memberBelongsToGym } from "@/lib/gym-scope";
 
 const logger = createLogger("collections-overdue");
 
 /**
- * OVERDUE TRACKING SERVICE
- * 
- * Rolling 30-day window based on nextRenewalDate
- * Auto-resolves when payment is received
- */
-
-/**
  * Detect members who are overdue based on rolling 30-day window
- * Shows members whose nextRenewalDate was between 30 days ago and today
  */
 export async function detectOverdueMembers(gymId: string) {
   const today = todayIST();
   const thirtyDaysAgo = addDaysIST(today, -30);
 
-  // Find members with nextRenewalDate in the rolling window who haven't paid
   const overdueMembers = await prisma.member.findMany({
     where: {
       gymId,
@@ -47,18 +42,16 @@ export async function detectOverdueMembers(gymId: string) {
     },
   });
 
-  // Filter out members who have paid since their renewal date
   const actuallyOverdue = overdueMembers.filter((member) => {
     if (!member.nextRenewalDate) return false;
-    
-    // If they have a payment after their renewal date, they're not overdue
+
     if (member.Payment.length > 0) {
       const lastPayment = member.Payment[0];
       if (lastPayment.receivedAt >= member.nextRenewalDate) {
         return false;
       }
     }
-    
+
     return true;
   });
 
@@ -66,16 +59,20 @@ export async function detectOverdueMembers(gymId: string) {
 }
 
 /**
- * Auto-resolve overdue tracking when a payment is made
- * This removes the member from overdue list and reactivates them if needed
+ * Auto-resolve overdue tracking when a payment is made (scoped to gym).
  */
-export async function resolveOverdueOnPayment(memberId: string) {
+export async function resolveOverdueOnPayment(memberId: string, gymId: string) {
   try {
-    // Find any active overdue tracking for this member
+    const belongs = await memberBelongsToGym(memberId, gymId);
+    if (!belongs) {
+      return { resolved: false, message: "Member not in gym" };
+    }
+
     const overdueRecords = await prisma.overdueTracking.findMany({
       where: {
+        gymId,
         memberId,
-        markedInactiveAt: null, // Only resolve unresolved records
+        markedInactiveAt: null,
       },
     });
 
@@ -83,22 +80,21 @@ export async function resolveOverdueOnPayment(memberId: string) {
       return { resolved: false, message: "No overdue records found" };
     }
 
-    // Delete all overdue tracking records for this member
     await prisma.overdueTracking.deleteMany({
       where: {
+        gymId,
         memberId,
       },
     });
 
-    // Reactivate member if they were marked as EXPIRED
-    const member = await prisma.member.findUnique({
-      where: { id: memberId },
+    const member = await prisma.member.findFirst({
+      where: { id: memberId, gymId },
       select: { status: true },
     });
 
     if (member?.status === MemberStatus.EXPIRED) {
-      await prisma.member.update({
-        where: { id: memberId },
+      await prisma.member.updateMany({
+        where: { id: memberId, gymId },
         data: { status: MemberStatus.ACTIVE },
       });
     }

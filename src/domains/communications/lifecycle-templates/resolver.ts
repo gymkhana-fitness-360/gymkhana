@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { gymKeyWhere } from "@/domains/platform/settings/service";
 import {
   DEFAULT_LIFECYCLE_TEMPLATE_BODIES,
   LIFECYCLE_TEMPLATE_META,
@@ -97,8 +98,9 @@ export async function getLifecycleTemplateBody(
   gymId: string,
   key: LifecycleTemplateKey,
 ): Promise<string> {
+  const settingKey = lifecycleTemplateSettingKey(key, gymId);
   const setting = await prisma.setting.findUnique({
-    where: { key: lifecycleTemplateSettingKey(key, gymId) },
+    where: gymKeyWhere(gymId, settingKey),
   });
   return setting?.value ?? getDefaultLifecycleBody(key);
 }
@@ -106,7 +108,7 @@ export async function getLifecycleTemplateBody(
 export async function listLifecycleTemplates(gymId: string): Promise<LifecycleTemplateView[]> {
   const keys = LIFECYCLE_TEMPLATE_KEYS.map((key) => lifecycleTemplateSettingKey(key, gymId));
   const settings = await prisma.setting.findMany({
-    where: { key: { in: keys } },
+    where: { gymId, key: { in: keys } },
   });
   const customByKey = new Map(
     settings.map((s) => {
@@ -134,8 +136,8 @@ export async function saveLifecycleTemplate(
 ): Promise<void> {
   const settingKey = lifecycleTemplateSettingKey(key, gymId);
   await prisma.setting.upsert({
-    where: { key: settingKey },
-    create: { key: settingKey, value: body },
+    where: gymKeyWhere(gymId, settingKey),
+    create: { gymId, key: settingKey, value: body },
     update: { value: body },
   });
 }
@@ -147,6 +149,7 @@ export async function resetLifecycleTemplate(
   const keys = key ? [key] : [...LIFECYCLE_TEMPLATE_KEYS];
   await prisma.setting.deleteMany({
     where: {
+      gymId,
       key: { in: keys.map((k) => lifecycleTemplateSettingKey(k, gymId)) },
     },
   });

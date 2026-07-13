@@ -9,11 +9,20 @@ import {
   resourceBelongsToGym,
 } from "@/domains/tenancy/assert-gym-resource";
 
+jest.mock("@/lib/gym-scope", () => ({
+  memberBelongsToGym: jest.fn(),
+}));
+
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     member: {
       findMany: jest.fn().mockResolvedValue([]),
       findFirst: jest.fn(),
+      updateMany: jest.fn().mockResolvedValue({ count: 1 }),
+    },
+    overdueTracking: {
+      findMany: jest.fn().mockResolvedValue([]),
+      deleteMany: jest.fn().mockResolvedValue({ count: 0 }),
     },
   },
 }));
@@ -40,6 +49,10 @@ describe("tenant isolation", () => {
   });
 
   it("memberBelongsToGym prevents cross-gym member access", async () => {
+    (memberBelongsToGym as jest.Mock).mockImplementation(async (memberId, gymId) => {
+      const row = await prisma.member.findFirst({ where: { id: memberId, gymId } });
+      return Boolean(row);
+    });
     (prisma.member.findFirst as jest.Mock).mockImplementation(({ where }) =>
       Promise.resolve(where.gymId === GYM_A ? { id: where.id } : null),
     );
@@ -52,6 +65,23 @@ describe("tenant isolation", () => {
     expect(resourceBelongsToGym({ gymId: GYM_A }, GYM_B)).toBe(false);
     expect(() => assertResourceBelongsToGym({ gymId: GYM_A }, GYM_B)).toThrow(
       "RESOURCE_NOT_IN_GYM",
+    );
+  });
+
+  it("resolveOverdueOnPayment scopes overdue queries by gymId", async () => {
+    const { memberBelongsToGym } = await import("@/lib/gym-scope");
+    (memberBelongsToGym as jest.Mock).mockResolvedValue(true);
+    (prisma.member.findFirst as jest.Mock).mockResolvedValue({ status: "ACTIVE" });
+
+    const { resolveOverdueOnPayment } = await import(
+      "@/domains/collections/services/overdue.service"
+    );
+    await resolveOverdueOnPayment("member-1", GYM_A);
+
+    expect(prisma.overdueTracking.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ gymId: GYM_A, memberId: "member-1" }),
+      }),
     );
   });
 

@@ -171,6 +171,7 @@ model Gym {
   CustomEntityDefinition CustomEntityDefinition[]
   CustomEntityRecord   CustomEntityRecord[]
   CustomAnalyticsDefinition CustomAnalyticsDefinition[]
+  Setting               Setting[]
 
   @@index([accountId])
 }
@@ -697,10 +698,15 @@ model Salary {
 
 model Setting {
   id          String   @id @default(cuid())
-  key         String   @unique
+  gymId       String   @db.Uuid
+  key         String
   value       String
   description String?
   updatedAt   DateTime @updatedAt
+  Gym         Gym      @relation(fields: [gymId], references: [id], onDelete: Cascade)
+
+  @@unique([gymId, key], name: "gymId_key")
+  @@index([gymId])
 }
 
 model OverdueTracking {

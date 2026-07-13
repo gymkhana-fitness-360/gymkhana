@@ -22,7 +22,7 @@ export class RoutingWhatsAppAdapter implements IWhatsAppDirectMessaging {
     if (process.env.META_WABA_FORCE === "1") return true;
     if (!gymId) return true;
     const row = await prisma.setting.findFirst({
-      where: { key: `wabaEnabled:${gymId}` },
+      where: { gymId, key: `wabaEnabled:${gymId}` },
     });
     return row?.value === "true";
   }
