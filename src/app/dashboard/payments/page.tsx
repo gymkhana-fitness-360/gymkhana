@@ -8,15 +8,8 @@ import { toast } from "sonner";
 import { createLogger } from "@/lib/logger";
 import { triggerPaymentUpdate } from "@/lib/sidebar-events";
 
-const logger = createLogger("dashboard-payments");
-const fetcher = async (url: string) => {
-  const res = await fetch(url);
-  if (!res.ok) {
-    const error = new Error("Failed to fetch data");
-    throw error;
-  }
-  return res.json();
-};
+import { inferPaymentNotesMeta } from "@/domains/payments/rules";
+import { swrFetcher } from "@/lib/swr/fetcher";
 import { PaymentStatus, PaymentMethod } from "@prisma/client";
 import { Search, Filter, RefreshCw, X, Loader2, MessageCircle, AlertCircle, Pencil, Trash2, CreditCard, DollarSign } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -216,7 +209,7 @@ export default function PaymentsPage() {
   params.append("includeStats", "false");
   const paymentsUrl = `/api/payments?${params}`;
 
-  const { data, isLoading, error, mutate: fetchPayments } = useSWR(paymentsUrl, fetcher, {
+  const { data, isLoading, error, mutate: fetchPayments } = useSWR(paymentsUrl, swrFetcher, {
     revalidateOnMount: true,
   });
 
@@ -303,61 +296,7 @@ export default function PaymentsPage() {
     return styles[method] || styles.OTHER;
   };
 
-  const parsePaymentNotes = (notes: string | null, paymentAmount?: number) => {
-    if (!notes) return null;
-    
-    const notesLower = notes.toLowerCase();
-    
-    // Check for explicit Personal Trainer indicators in notes
-    const hasPTKeywords = notesLower.includes("personal trainer") || 
-                         notesLower.includes("pt") ||
-                         notesLower.includes("trainer");
-    
-    // Check for combined payment patterns like "700+1800" (membership + PT)
-    const combinedPattern = /(\d+)\s*\+\s*(\d+)/g;
-    const combinedMatches = notes.match(combinedPattern);
-    let hasPTAmount = false;
-    let totalCombinedAmount = 0;
-    
-    if (combinedMatches) {
-      // Extract amounts from patterns like "700+1800"
-      combinedMatches.forEach(match => {
-        const parts = match.split('+').map(p => parseFloat(p.trim()));
-        const sum = parts.reduce((a, b) => a + b, 0);
-        totalCombinedAmount = Math.max(totalCombinedAmount, sum);
-        // If combined amount >= 1800, likely includes PT
-        if (sum >= 1800) {
-          hasPTAmount = true;
-        }
-      });
-    }
-    
-    // Check if payment amount itself qualifies for PT (>= ₹1800)
-    // OR if it's a 3-month package (₹4500 = ₹1500/month for 3 months)
-    const isPTByAmount = paymentAmount !== undefined && (
-      paymentAmount >= 1800 || // Single PT payment
-      paymentAmount >= 4500    // 3-month PT package
-    );
-    
-    // Personal Trainer if: explicit keywords OR combined amount >= 1800 OR payment >= 1800
-    const isPersonalTrainer = hasPTKeywords || hasPTAmount || isPTByAmount;
-    
-    // Check for friends & family discount
-    const hasDiscount = notesLower.includes("friends") || 
-                       notesLower.includes("family") ||
-                       notesLower.includes("discount");
-    
-    // Check for seasonal packages (3 months, 6 months)
-    const seasonalMatch = notes.match(/(\d+)\s*months?/i);
-    
-    return {
-      raw: notes,
-      hasDiscount,
-      isPersonalTrainer,
-      seasonalPackage: seasonalMatch ? parseInt(seasonalMatch[1]) : null,
-      combinedAmount: totalCombinedAmount > 0 ? totalCombinedAmount : null,
-    };
-  };
+  const parsePaymentNotes = inferPaymentNotesMeta;
 
   const hasActiveFilters = search || statusFilter || methodFilter || startDate || endDate;
 

@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-
 import { z } from "zod";
 import { parseJsonBody } from "@/lib/security/parse-json-body";
 
-const mutatingBodySchema = z.any();
+const createCommissionSchema = z.object({
+  trainerId: z.string().min(1),
+  memberId: z.string().min(1),
+  baseAmount: z.coerce.number().positive(),
+  month: z.coerce.number().int().min(1).max(12),
+  year: z.coerce.number().int().min(2000),
+  notes: z.string().optional(),
+});
+
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 import { Prisma } from '@prisma/client';
@@ -114,20 +121,12 @@ export async function POST(request: NextRequest) {
 
     const { gymId } = await getGymContext(request);
 
-    const parsedBody = await parseJsonBody(request, mutatingBodySchema);
+    const parsedBody = await parseJsonBody(request, createCommissionSchema);
     if (!parsedBody.ok) return parsedBody.response;
-    const body = parsedBody.data as any;
-    const { trainerId, memberId, baseAmount, month, year, notes } = body;
+    const { trainerId, memberId, baseAmount, month, year, notes } = parsedBody.data;
 
-    if (!trainerId || !memberId || !baseAmount || !month || !year) {
-      return ApiErrors.validationError("Missing required fields");
-    }
-
-    const monthNum = parseInt(String(month), 10);
-    const yearNum = parseInt(String(year), 10);
-    if (Number.isNaN(monthNum) || Number.isNaN(yearNum)) {
-      return ApiErrors.validationError("Invalid month or year");
-    }
+    const monthNum = month;
+    const yearNum = year;
 
     // Get trainer's commission rate — scoped to the caller's account so a trainer
     // from another account/gym can't be referenced.

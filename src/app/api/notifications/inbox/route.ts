@@ -1,59 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import {
-  readRequestedGymIdFromRequest,
-  resolveGymIdForUser,
-} from "@/lib/gym-scope";
+import { NextRequest } from "next/server";
 import { withRateLimit } from "@/lib/middleware/rate-limit";
-import { ApiErrors } from "@/lib/api-handler";
-
-const markReadSchema = z.object({ id: z.string().min(1) });
+import {
+  listNotificationsInboxHandler,
+  markNotificationReadHandler,
+} from "@/domains/platform/notifications/inbox";
 
 export async function GET(request: NextRequest) {
   const rl = withRateLimit(request, "lenient");
   if (rl) return rl;
-
-  const session = await auth();
-  if (!session?.user?.id) return ApiErrors.unauthorized();
-
-  const gymId = await resolveGymIdForUser(
-    session.user.id,
-    readRequestedGymIdFromRequest(request)
-  );
-  if (!gymId) return ApiErrors.badRequest("No gym selected");
-
-  const unreadOnly = request.nextUrl.searchParams.get("unread") === "true";
-
-  const notifications = await prisma.staffNotification.findMany({
-    where: {
-      gymId,
-      userId: session.user.id,
-      ...(unreadOnly ? { readAt: null } : {}),
-    },
-    orderBy: { createdAt: "desc" },
-    take: 50,
-  });
-
-  return NextResponse.json(notifications);
+  return listNotificationsInboxHandler(request);
 }
 
 export async function PATCH(request: NextRequest) {
   const rl = withRateLimit(request, "strict");
   if (rl) return rl;
-
-  const session = await auth();
-  if (!session?.user?.id) return ApiErrors.unauthorized();
-
-  const parsed = markReadSchema.safeParse(await request.json().catch(() => ({})));
-  if (!parsed.success) return ApiErrors.validationError("id required");
-  const { id } = parsed.data;
-
-  await prisma.staffNotification.updateMany({
-    where: { id, userId: session.user.id },
-    data: { readAt: new Date() },
-  });
-
-  return NextResponse.json({ success: true });
+  return markNotificationReadHandler(request);
 }

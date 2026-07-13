@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FileText, Search, Filter, Eye, Download, MessageSquare, Send, Loader2, Bell } from "lucide-react";
 import Link from "next/link";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { createLogger } from "@/lib/logger";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,38 +14,14 @@ import {
   WHATSAPP_SETUP_HINT,
 } from "@/lib/messaging/whatsapp-copy";
 import { useActionQueue } from "@/hooks/use-action-queue";
+import {
+  type BillListItem,
+  useBillsList,
+  usePaymentsNotSent,
+  useRenewalReminderCandidates,
+} from "@/hooks/use-bills-list";
 
-const logger = createLogger("dashboard-bills");
-
-interface Bill {
-  id: string;
-  billNumber: string;
-  programType: string;
-  amount: string | null;
-  paymentMethod: string;
-  month: string;
-  validFrom: string;
-  validTo: string;
-  hideAmount: boolean;
-  createdAt: string;
-  status: string;
-  dueAmount: string | number;
-  paidAmount: string | number;
-  member?: {
-    id: string;
-    name: string;
-    phone: string;
-    externalId: string | null;
-  };
-  Member?: {
-    id: string;
-    name: string;
-    phone: string;
-    externalId?: string | null;
-  };
-  generatedBy?: { name: string };
-  User?: { name: string };
-}
+interface Bill extends BillListItem {}
 
 function billMember(bill: Bill) {
   return bill.member ?? bill.Member;
@@ -74,54 +49,23 @@ interface RenewalCandidate {
 }
 
 export default function BillsPage() {
-  const [bills, setBills] = useState<Bill[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("bills");
+  const { bills, billsLoading: loading, mutateBills } = useBillsList();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterProgram, setFilterProgram] = useState<string>("ALL");
 
-  const [paymentsNotSent, setPaymentsNotSent] = useState<PaymentNotSent[]>([]);
-  const [paymentsLoading, setPaymentsLoading] = useState(false);
-  const [sendingBillId, setSendingBillId] = useState<string | null>(null);
+  const { paymentsNotSent, paymentsLoading, mutatePaymentsNotSent } = usePaymentsNotSent(
+    activeTab === "not-sent",
+  );
 
-  const [dueIn7Days, setDueIn7Days] = useState<RenewalCandidate[]>([]);
-  const [dueIn3Days, setDueIn3Days] = useState<RenewalCandidate[]>([]);
-  const [remindersLoading, setRemindersLoading] = useState(false);
   const [reminderLookback, setReminderLookback] = useState("30");
   const [reminderFromDate, setReminderFromDate] = useState("");
+  const { dueIn7Days, dueIn3Days, remindersLoading, mutateReminderCandidates } =
+    useRenewalReminderCandidates(activeTab === "reminders", reminderLookback, reminderFromDate);
+
+  const [sendingBillId, setSendingBillId] = useState<string | null>(null);
   const [sendingReminders, setSendingReminders] = useState(false);
   const { enqueueAction, isQueued } = useActionQueue();
-
-  useEffect(() => {
-    fetchBills();
-  }, []);
-
-  const fetchBills = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/bills");
-      if (response.ok) {
-        const data = await response.json();
-        setBills(data);
-      }
-    } catch (error) {
-      logger.error("Error fetching bills:", error as Error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchPaymentsNotSent = async () => {
-    setPaymentsLoading(true);
-    try {
-      const res = await fetch("/api/payments/sent-status");
-      if (res.ok) {
-        const data = await res.json();
-        setPaymentsNotSent(data.payments || []);
-      }
-    } finally {
-      setPaymentsLoading(false);
-    }
-  };
 
   const sendBill = async (paymentId: string) => {
     enqueueAction(`send-bill:${paymentId}`, async () => {
@@ -130,7 +74,7 @@ export default function BillsPage() {
         const res = await fetch(`/api/payments/${paymentId}/send-bill`, { method: "POST" });
         const data = await res.json();
         if (res.ok && data.success) {
-          await fetchPaymentsNotSent();
+          await mutatePaymentsNotSent();
         } else {
           alert(data.error || data.message || "Failed to send bill");
         }
@@ -140,23 +84,6 @@ export default function BillsPage() {
         setSendingBillId((current) => (current === paymentId ? null : current));
       }
     });
-  };
-
-  const fetchReminderCandidates = async () => {
-    setRemindersLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (reminderFromDate) params.set("fromDate", reminderFromDate);
-      else params.set("lookback", reminderLookback);
-      const res = await fetch(`/api/renewals/reminder-candidates?${params}`);
-      if (res.ok) {
-        const data = await res.json();
-        setDueIn7Days(data.dueIn7Days || []);
-        setDueIn3Days(data.dueIn3Days || []);
-      }
-    } finally {
-      setRemindersLoading(false);
-    }
   };
 
   const sendBulkReminders = async (memberIds: string[]) => {
@@ -173,7 +100,7 @@ export default function BillsPage() {
         const data = await res.json();
         if (res.ok) {
           alert(`Sent: ${data.sent}, Failed: ${data.failed}`);
-          await fetchReminderCandidates();
+          await mutateReminderCandidates();
         } else {
           alert(data.error || "Failed to send reminders");
         }
@@ -240,11 +167,11 @@ export default function BillsPage() {
         }
       />
 
-      <Tabs defaultValue="bills" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-3 max-w-md">
           <TabsTrigger value="bills">Bills</TabsTrigger>
-          <TabsTrigger value="not-sent" onClick={fetchPaymentsNotSent}>Bills Not Sent</TabsTrigger>
-          <TabsTrigger value="reminders" onClick={fetchReminderCandidates}>Renewal Reminders</TabsTrigger>
+          <TabsTrigger value="not-sent">Bills Not Sent</TabsTrigger>
+          <TabsTrigger value="reminders">Renewal Reminders</TabsTrigger>
         </TabsList>
 
         <TabsContent value="bills" className="space-y-6">
@@ -531,7 +458,7 @@ export default function BillsPage() {
               </div>
               <Button
                 type="button"
-                onClick={fetchReminderCandidates}
+                onClick={() => mutateReminderCandidates()}
                 disabled={remindersLoading}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
               >

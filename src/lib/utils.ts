@@ -6,6 +6,7 @@
 
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { compareDateIST, dateFromParts, endOfDayIST, todayIST, toDateOnlyIST, addDaysIST, calendarDaysApartIST } from "@/lib/date-only"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -120,10 +121,11 @@ export function formatMonthYear(monthYearKey: string): string {
 }
 
 export function getMonthStartEnd(monthYearKey: string): { start: Date; end: Date } {
-  const [year, month] = monthYearKey.split('-');
-  const start = new Date(parseInt(year), parseInt(month) - 1, 1);
-  start.setHours(0, 0, 0, 0);
-  const end = new Date(parseInt(year), parseInt(month), 0, 23, 59, 59, 999);
+  const [year, month] = monthYearKey.split('-').map(Number);
+  const start = dateFromParts(year, month, 1);
+  const end = endOfDayIST(
+    addDaysIST(month === 12 ? dateFromParts(year + 1, 1, 1) : dateFromParts(year, month + 1, 1), -1),
+  );
   return { start, end };
 }
 
@@ -137,44 +139,42 @@ export function calculateMembershipValidity(
   latestPaymentDate: Date | string | null | undefined,
   membershipEndDate: Date | string
 ): { isValid: boolean; reason: string } {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = todayIST();
 
-  // Current month boundaries
-  const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-  currentMonthStart.setHours(0, 0, 0, 0);
-  const currentMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
+  const y = today.getUTCFullYear();
+  const m = today.getUTCMonth() + 1;
+  const currentMonthStart = dateFromParts(y, m, 1);
+  const currentMonthEnd = endOfDayIST(
+    addDaysIST(m === 12 ? dateFromParts(y + 1, 1, 1) : dateFromParts(y, m + 1, 1), -1),
+  );
+  const lastMonth = m === 1 ? 12 : m - 1;
+  const lastYear = m === 1 ? y - 1 : y;
+  const lastMonthStart = dateFromParts(lastYear, lastMonth, 1);
+  const lastMonthEnd = endOfDayIST(
+    addDaysIST(lastMonth === 12 ? dateFromParts(lastYear + 1, 1, 1) : dateFromParts(lastYear, lastMonth + 1, 1), -1),
+  );
 
-  // Last month boundaries
-  const lastMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-  lastMonthStart.setHours(0, 0, 0, 0);
-  const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59, 999);
+  const paymentDate = latestPaymentDate ? toDateOnlyIST(latestPaymentDate) : null;
+  const endDate = toDateOnlyIST(membershipEndDate);
 
-  // Parse dates
-  const paymentDate = latestPaymentDate ? (typeof latestPaymentDate === 'string' ? new Date(latestPaymentDate) : latestPaymentDate) : null;
-  const endDate = typeof membershipEndDate === 'string' ? new Date(membershipEndDate) : membershipEndDate;
-  endDate.setHours(0, 0, 0, 0);
-
-  // If no payment exists, check membership end date
   if (!paymentDate) {
-    const isValid = endDate >= today;
+    const isValid = compareDateIST(endDate, today) >= 0;
     return {
       isValid,
-      reason: isValid 
-        ? 'Valid based on membership end date (no payment records)' 
+      reason: isValid
+        ? 'Valid based on membership end date (no payment records)'
         : 'Expired - no payment records and membership end date has passed'
     };
   }
 
-  paymentDate.setHours(0, 0, 0, 0);
+  const isPaymentInCurrentMonth =
+    compareDateIST(paymentDate, currentMonthStart) >= 0 &&
+    compareDateIST(paymentDate, currentMonthEnd) <= 0;
 
-  // Check if payment is in current month
-  const isPaymentInCurrentMonth = paymentDate >= currentMonthStart && paymentDate <= currentMonthEnd;
+  const isPaymentInLastMonth =
+    compareDateIST(paymentDate, lastMonthStart) >= 0 &&
+    compareDateIST(paymentDate, lastMonthEnd) <= 0;
 
-  // Check if payment is in last month
-  const isPaymentInLastMonth = paymentDate >= lastMonthStart && paymentDate <= lastMonthEnd;
-
-  // If payment is in current month, membership is valid
   if (isPaymentInCurrentMonth) {
     return {
       isValid: true,
@@ -182,23 +182,22 @@ export function calculateMembershipValidity(
     };
   }
 
-  // If payment is in last month, check membership end date
   if (isPaymentInLastMonth) {
-    const isValid = endDate >= today;
+    const isValid = compareDateIST(endDate, today) >= 0;
     return {
       isValid,
-      reason: isValid 
-        ? 'Valid - payment made in last month and membership end date not expired' 
+      reason: isValid
+        ? 'Valid - payment made in last month and membership end date not expired'
         : 'Expired - payment made in last month but membership end date has passed'
     };
   }
 
-  // Payment is older than last month, check membership end date
-  const isValid = endDate >= today;
+  const isValid = compareDateIST(endDate, today) >= 0;
+  const daysAgo = calendarDaysApartIST(today, paymentDate);
   return {
     isValid,
-    reason: isValid 
-      ? `Valid - payment made ${Math.floor((today.getTime() - paymentDate.getTime()) / (1000 * 60 * 60 * 24))} days ago, but membership end date not expired` 
-      : `Expired - payment made ${Math.floor((today.getTime() - paymentDate.getTime()) / (1000 * 60 * 60 * 24))} days ago and membership end date has passed`
+    reason: isValid
+      ? `Valid - payment made ${daysAgo} days ago, but membership end date not expired`
+      : `Expired - payment made ${daysAgo} days ago and membership end date has passed`
   };
 }

@@ -187,7 +187,10 @@ export function registerExpansionTools() {
     agentScopes: ["write:reminders"],
     audit: "mutations",
     handler: async (ctx, input) => {
-      const membership = await createMembershipForMember(ctx.gymId, input);
+      const membership = await createMembershipForMember(ctx.gymId, {
+        ...input,
+        userId: ctx.userId ?? "system",
+      });
       if (!membership) {
         throw new ToolExecutionError("invalid_input", "member_or_plan_not_found");
       }

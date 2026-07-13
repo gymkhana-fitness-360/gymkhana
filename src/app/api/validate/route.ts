@@ -1,12 +1,7 @@
-import { NextResponse } from "next/server";
 import { createApiHandler } from "@/lib/api-handler";
-import { AppValidator } from "@/lib/validate";
+import { validateEnvHandler } from "@/domains/platform/handlers/validate-env";
 
 export const GET = createApiHandler(
-  async () => {
-    const validator = new AppValidator();
-    const report = await validator.validate();
-    return NextResponse.json(report);
-  },
+  async () => validateEnvHandler(),
   { rateLimit: "lenient" },
 );

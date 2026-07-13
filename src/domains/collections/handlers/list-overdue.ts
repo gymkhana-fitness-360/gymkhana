@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { detectOverdueMembers } from "@/domains/collections/services/overdue.service";
-import { todayIST, addDaysIST } from "@/lib/date-only";
+import { todayIST, addDaysIST, calendarDaysApartIST, compareDateIST } from "@/lib/date-only";
 import { requireApiGymId } from "@/lib/api/gym-context";
 import type { Session } from "next-auth";
 
@@ -12,14 +12,13 @@ export async function listOverdueForGymId(gymId: string) {
 
   const enrichedRecords = overdueMembers.map((member) => {
     const renewalDate = member.nextRenewalDate!;
-    const daysOverdue = Math.floor(
-      (today.getTime() - renewalDate.getTime()) / (1000 * 60 * 60 * 24),
-    );
+    const daysOverdue =
+      compareDateIST(renewalDate, today) < 0
+        ? calendarDaysApartIST(today, renewalDate)
+        : 0;
     const lastPayment = member.Payment[0];
     const daysSinceLastPayment = lastPayment
-      ? Math.floor(
-          (today.getTime() - lastPayment.receivedAt.getTime()) / (1000 * 60 * 60 * 24),
-        )
+      ? calendarDaysApartIST(today, lastPayment.receivedAt)
       : null;
 
     return {

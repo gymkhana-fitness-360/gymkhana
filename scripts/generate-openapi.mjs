@@ -27,21 +27,29 @@ for (const file of walk(API_DIR)) {
       .replace(/\[([^\]]+)\]/g, "{$1}");
   const src = readFileSync(file, "utf8");
   const methods = [];
-  if (/\bexport\s+async\s+function\s+GET\b/.test(src)) methods.push("get");
-  if (/\bexport\s+async\s+function\s+POST\b/.test(src)) methods.push("post");
-  if (/\bexport\s+async\s+function\s+PUT\b/.test(src)) methods.push("put");
-  if (/\bexport\s+async\s+function\s+PATCH\b/.test(src)) methods.push("patch");
-  if (/\bexport\s+async\s+function\s+DELETE\b/.test(src)) methods.push("delete");
+  const methodNames = ["GET", "POST", "PUT", "PATCH", "DELETE"];
+  for (const name of methodNames) {
+    const fnExport = new RegExp(`\\bexport\\s+async\\s+function\\s+${name}\\b`);
+    const constExport = new RegExp(`\\bexport\\s+const\\s+${name}\\b`);
+    if (fnExport.test(src) || constExport.test(src)) {
+      methods.push(name.toLowerCase());
+    }
+  }
   if (methods.length === 0) continue;
 
   paths[routePath] = {};
   for (const m of methods) {
+    const isV1 = routePath.startsWith("/v1/");
+    const isCron = routePath.startsWith("/cron");
+    const isWebhook = routePath.startsWith("/webhooks");
     paths[routePath][m] = {
       summary: `${m.toUpperCase()} ${routePath}`,
       responses: { "200": { description: "OK" } },
-      security: routePath.startsWith("/cron") || routePath.startsWith("/webhooks")
+      security: isCron || isWebhook
         ? []
-        : [{ cookieAuth: [] }],
+        : isV1
+          ? [{ apiKeyAuth: [] }]
+          : [{ cookieAuth: [] }],
     };
   }
 }
@@ -96,6 +104,7 @@ const spec = {
     securitySchemes: {
       cookieAuth: { type: "apiKey", in: "cookie", name: "next-auth.session-token" },
       bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "OAuth" },
+      apiKeyAuth: { type: "apiKey", in: "header", name: "x-api-key" },
     },
   },
   paths,

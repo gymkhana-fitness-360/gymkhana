@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { parseJsonBody } from "@/lib/security/parse-json-body";
 
-const mutatingBodySchema = z.any();
+const dedupeBodySchema = z.object({
+  execute: z.boolean().optional().default(false),
+});
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
@@ -19,6 +21,7 @@ import {
   pickPaymentDuplicateKeeper,
   type PayRowDedupe,
 } from "@/lib/payment-dedupe-clustering";
+import { updateMemberScoped } from "@/domains/tenancy/scoped-write";
 
 const logger = createLogger("api-dedupe");
 const TZ = "Asia/Kolkata";
@@ -40,10 +43,9 @@ export async function deduplicatePaymentsHandler(request: NextRequest) {
       return ApiErrors.forbidden("Admin access required");
     }
 
-    const parsedBody = await parseJsonBody(request, mutatingBodySchema);
+    const parsedBody = await parseJsonBody(request, dedupeBodySchema);
     if (!parsedBody.ok) return parsedBody.response;
-    const body = parsedBody.data as any;
-    const { execute = false } = body;
+    const { execute = false } = parsedBody.data;
 
     const gymId = await resolveGymIdForUser(
       session.user.id,
@@ -137,15 +139,16 @@ export async function deduplicatePaymentsHandler(request: NextRequest) {
           where: { paymentId: { in: deletedIds } },
           data: { paymentId: null },
         });
-        await tx.payment.deleteMany({ where: { id: { in: deletedIds } } });
+        await tx.payment.deleteMany({
+          where: { id: { in: deletedIds }, gymId },
+        });
       }
 
       for (const [id, amt] of toUpdateAmount) {
-        await tx.$executeRaw`
-          UPDATE "Payment"
-          SET amount = ${amt}::decimal(10, 2)
-          WHERE id = ${id}
-        `;
+        await tx.payment.updateMany({
+          where: { id, gymId },
+          data: { amount: amt },
+        });
       }
     });
 
@@ -157,11 +160,8 @@ export async function deduplicatePaymentsHandler(request: NextRequest) {
         orderBy: { receivedAt: "desc" },
         select: { receivedAt: true },
       });
-      await prisma.member.update({
-        where: { id: memberId },
-        data: {
-          lastPaymentDate: last ? toDateOnlyIST(last.receivedAt) : null,
-        },
+      await updateMemberScoped(prisma, gymId, memberId, {
+        lastPaymentDate: last ? toDateOnlyIST(last.receivedAt) : null,
       });
     }
 
