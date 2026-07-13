@@ -1,7 +1,7 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 
-const MIN_NODE = [20, 9, 0];
+const MIN_NODE = [24, 0, 0];
 
 export function parseNodeVersion(raw) {
   const m = /^v?(\d+)\.(\d+)\.(\d+)/.exec(raw.trim());
