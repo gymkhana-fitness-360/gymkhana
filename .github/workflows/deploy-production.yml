@@ -24,6 +24,22 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel@55
 
+      - name: Verify Vercel credentials
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN is not set. Create a token at https://vercel.com/account/tokens and add it to repo secrets."
+            exit 1
+          fi
+          if [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "::error::VERCEL_ORG_ID and VERCEL_PROJECT_ID must be set."
+            exit 1
+          fi
+          vercel whoami --token="$VERCEL_TOKEN"
+
       - name: Deploy to Vercel
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
