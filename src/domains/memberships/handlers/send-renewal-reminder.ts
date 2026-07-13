@@ -38,7 +38,10 @@ export async function sendRenewalReminderHandler(
           ? { id: parsed.data.membershipId }
           : { memberId: parsed.data.memberId }),
       },
-      include: { Member: { select: { id: true, name: true, phone: true } } },
+      include: {
+        Member: { select: { id: true, name: true, phone: true } },
+        Plan: { select: { name: true } },
+      },
       orderBy: { endDate: "desc" },
     });
 
@@ -48,11 +51,14 @@ export async function sendRenewalReminderHandler(
     const daysUntil = -daysFromTodayIST(endDate);
     const daysOverdue = daysUntil < 0 ? Math.abs(daysUntil) : undefined;
 
-    const message = formatSimpleReminderMessage({
+    const message = await formatSimpleReminderMessage({
       name: membership.Member.name,
       expiryDate: formatDate(membership.endDate),
+      daysLeft: daysUntil,
       daysOverdue,
+      planName: membership.Plan?.name,
       phoneNumber: membership.Member.phone,
+      gymId,
     });
 
     const phone = membership.Member.phone?.replace(/\D/g, "") || "";

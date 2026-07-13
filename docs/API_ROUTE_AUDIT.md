@@ -2,8 +2,8 @@
 
 Auto-generated route inventory (`npm run audit:api-routes`). Regenerate after API changes.
 
-**Generated:** 2026-07-12  
-**Routes:** 168 · **Migrated:** 78 · **Partial:** 26 · **Direct Prisma:** 64
+**Generated:** 2026-07-13  
+**Routes:** 169 · **Migrated:** 79 · **Partial:** 26 · **Direct Prisma:** 64
 
 Regenerate: `npm run audit:api-routes`
 
@@ -156,6 +156,7 @@ Regenerate: `npm run audit:api-routes`
 | `/api/settings/agent-clients/test` | admin | no | no | direct-prisma |
 | `/api/settings/notifications` | admin | yes | no | direct-prisma |
 | `/api/settings/session` | admin | yes | no | direct-prisma |
+| `/api/settings/whatsapp-lifecycle-templates` | admin | no | yes | migrated |
 | `/api/trainers/commissions` | trainers | yes | yes | partial |
 | `/api/trainers/leaderboard` | trainers | no | yes | migrated |
 | `/api/trials/active` | platform | no | yes | migrated |

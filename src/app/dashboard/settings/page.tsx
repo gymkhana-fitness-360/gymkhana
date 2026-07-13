@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { createLogger } from "@/lib/logger";
 import { LanguageSwitcher } from "@/components/i18n/locale-provider";
 import { ServicesCatalogCard } from "@/components/settings/ServicesCatalogCard";
+import { WhatsAppLifecycleTemplatesCard } from "@/components/settings/WhatsAppLifecycleTemplatesCard";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { useActionQueue } from "@/hooks/use-action-queue";
 
@@ -552,6 +553,7 @@ export default function SettingsPage() {
               </Button>
             </CardContent>
           </Card>
+          <WhatsAppLifecycleTemplatesCard />
         </TabsContent>
 
         <TabsContent value="plans" className="space-y-4">

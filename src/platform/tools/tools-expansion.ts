@@ -346,6 +346,7 @@ export function registerExpansionTools() {
             where: { gymId: ctx.gymId },
             orderBy: { endDate: "desc" },
             take: 1,
+            include: { Plan: { select: { name: true } } },
           },
         },
       });
@@ -361,11 +362,15 @@ export function registerExpansionTools() {
           ? Math.max(0, -daysFromTodayIST(toDateOnlyIST(expiry)))
           : undefined;
 
-      let draft = formatSimpleReminderMessage({
+      let draft = await formatSimpleReminderMessage({
         name: member.name,
         expiryDate: expiry ? formatDate(expiry) : "soon",
+        daysLeft:
+          expiry != null ? -daysFromTodayIST(toDateOnlyIST(expiry)) : undefined,
         daysOverdue: daysOverdue || undefined,
+        planName: membership?.Plan?.name,
         phoneNumber: member.phone,
+        gymId: ctx.gymId,
       });
 
       const purpose = input.purpose ?? "general";
