@@ -107,3 +107,6 @@ COMMIT_SUMMARY.md
 # Empty placeholder dirs
 /swe-agent-langgraph/
 gh-org-avatar-upload.mjs
+
+# local HTML prototypes (workspace root — never commit)
+../mockups/
