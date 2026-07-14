@@ -11,6 +11,11 @@ const createCommissionSchema = z.object({
   notes: z.string().optional(),
 });
 
+const mutatingBodySchema = z.object({
+  commissionId: z.string().min(1),
+  isPaid: z.boolean().optional(),
+});
+
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 import { Prisma } from '@prisma/client';
@@ -216,12 +221,7 @@ export async function PATCH(request: NextRequest) {
 
     const parsedBody = await parseJsonBody(request, mutatingBodySchema);
     if (!parsedBody.ok) return parsedBody.response;
-    const body = parsedBody.data as any;
-    const { commissionId, isPaid } = body;
-
-    if (!commissionId) {
-      return ApiErrors.validationError("Commission ID required");
-    }
+    const { commissionId, isPaid } = parsedBody.data;
 
     const existing = await prisma.trainerCommission.findFirst({
       where: { id: commissionId, gymId },
