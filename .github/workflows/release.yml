@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  github-release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Validate release metadata
+        run: node scripts/release/validate-release.mjs --tag "${{ github.ref_name }}"
+
+      - name: Extract release notes from CHANGELOG
+        run: node scripts/release/extract-changelog.mjs --tag "${{ github.ref_name }}" --out release-notes.md
+
+      - name: Read release title from manifest
+        id: meta
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          TITLE=$(node -e "
+            const m = require('./docs/releases.json');
+            const r = m.releases.find(x => x.version === process.argv[1]);
+            if (!r) process.exit(1);
+            console.log(r.title);
+          " "$VERSION")
+          echo "title=${TITLE}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "${{ github.ref_name }} — ${{ steps.meta.outputs.title }}"
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
+          generate_release_notes: false

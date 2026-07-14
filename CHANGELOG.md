@@ -4,7 +4,7 @@ All notable changes to the [gymkhana](https://github.com/gymkhana-fitness-360/gy
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning follows [SemVer](https://semver.org/).
 
-**Live release notes:** [gymkhana.fit/developers#releases](https://www.gymkhana.fit/developers#releases) (API) · [gymkhana.fit/docs/updates](https://www.gymkhana.fit/docs/updates) (operators) · [GitHub Releases](https://github.com/gymkhana-fitness-360/gymkhana/releases)
+**Live release notes:** [gymkhana.fit/developers#releases](https://www.gymkhana.fit/developers#releases) (API) · [gymkhana.fit/docs/whats-new](https://www.gymkhana.fit/docs/whats-new) (operators) · [GitHub Releases](https://github.com/gymkhana-fitness-360/gymkhana/releases)
 
 ---
 
@@ -26,7 +26,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Version
 ### Documentation
 
 - Feature parity matrix and release notes on developers portal.
-- Operator feature updates at `/docs/updates`.
+- Operator feature updates at `/docs/whats-new`.
 
 ---
 

@@ -34,8 +34,16 @@ reviews:
         Schema changes need migrations. Check tenant scoping on new models (gymId FK).
     - path: "docs/**"
       instructions: |
-        Docs are audience-specific: operators (product), integrators (developers portal
-        in gymkhana-cloud), contributors (CONTRIBUTING, ADRs).
+        Docs are audience-specific: operators (Mintlify /docs), integrators (developers
+        portal in gymkhana-cloud), contributors (CONTRIBUTING, ADRs). See docs/RELEASES.md.
+    - path: "CHANGELOG.md"
+      instructions: |
+        Keep a Changelog format. Each version needs ## [X.Y.Z] - date, Added/Changed/Fixed
+        sections, and link at bottom. Must match package.json version and docs/releases.json.
+    - path: "docs/releases.json"
+      instructions: |
+        Structured release manifest for portal sync. Top entry must match package.json
+        version. Each change needs type, audience (product|developer|both), title.
 
 chat:
   auto_reply: true

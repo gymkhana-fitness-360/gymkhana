@@ -1,0 +1,120 @@
+{
+  "$schema": "./releases.schema.json",
+  "repository": "https://github.com/gymkhana-fitness-360/gymkhana",
+  "releases": [
+    {
+      "version": "0.2.0",
+      "date": "2026-07-12",
+      "title": "Extensions, member photos & documentation",
+      "summary": "Custom entities and custom analytics APIs, member profile photos with avatar generation, and a three-audience documentation site (product, developers, contributors).",
+      "githubTag": "v0.2.0",
+      "changes": [
+        {
+          "type": "feature",
+          "audience": "product",
+          "title": "Member profile photos",
+          "description": "Upload a photo or generate an initials avatar from the member profile page (JPEG/PNG/WebP/GIF, max 500KB).",
+          "docHref": "/docs/updates#v0-2-0"
+        },
+        {
+          "type": "api",
+          "audience": "developer",
+          "title": "Custom entities API",
+          "description": "Define per-gym record types and store JSON records without schema migrations.",
+          "docHref": "/developers#customEntities"
+        },
+        {
+          "type": "api",
+          "audience": "developer",
+          "title": "Custom analytics API",
+          "description": "Save and run reusable metrics over members, payments, attendance, or custom entity records.",
+          "docHref": "/developers#customAnalytics"
+        },
+        {
+          "type": "docs",
+          "audience": "product",
+          "title": "Operator documentation guides",
+          "description": "Structured product guides at /docs — getting started, daily operations, renewals, configuration, FAQ, and WhatsApp templates.",
+          "docHref": "/docs/getting-started"
+        },
+        {
+          "type": "docs",
+          "audience": "both",
+          "title": "Documentation site split",
+          "description": "Product guides at /docs, developer portal at /developers, OSS architecture at /docs/architecture.",
+          "docHref": "/docs"
+        },
+        {
+          "type": "docs",
+          "audience": "developer",
+          "title": "OpenAPI updated",
+          "description": "openapi.json includes new extension and member photo routes.",
+          "docHref": "/developers/openapi.json"
+        },
+        {
+          "type": "improvement",
+          "audience": "developer",
+          "title": "Developers portal restored",
+          "description": "Full API reference, playground, data models, MCP section, and release notes."
+        }
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-07-10",
+      "title": "Initial open-source release",
+      "summary": "Fitness360 / Gymkhana core — members, payments, attendance, billing, WhatsApp reminders, multi-gym tenancy, and marketplace installs.",
+      "githubTag": "v0.1.0",
+      "changes": [
+        {
+          "type": "feature",
+          "audience": "product",
+          "title": "Member & membership management",
+          "description": "Admit members, plans, renewals, overdue tracking, and payment history."
+        },
+        {
+          "type": "feature",
+          "audience": "product",
+          "title": "Attendance & QR check-in",
+          "description": "Manual and QR-based check-in with dashboard stats."
+        },
+        {
+          "type": "feature",
+          "audience": "product",
+          "title": "Payments & billing",
+          "description": "Record payments, bills, collections dashboard, and expense tracking."
+        },
+        {
+          "type": "feature",
+          "audience": "product",
+          "title": "WhatsApp reminders",
+          "description": "Meta Cloud API integration for renewal nudges and campaigns."
+        },
+        {
+          "type": "feature",
+          "audience": "product",
+          "title": "Multi-gym tenancy",
+          "description": "Account-scoped gyms with RBAC and gymId isolation on all tenant data."
+        },
+        {
+          "type": "api",
+          "audience": "developer",
+          "title": "Session-authenticated REST API",
+          "description": "~165 dashboard API routes with domain-driven handlers."
+        },
+        {
+          "type": "api",
+          "audience": "developer",
+          "title": "Preview v1 API",
+          "description": "GET /api/v1/members and cashflow with x-api-key authentication."
+        },
+        {
+          "type": "feature",
+          "audience": "product",
+          "title": "In-dashboard marketplace",
+          "description": "Optional installs: Razorpay, class booking, member portal, and more."
+        }
+      ]
+    }
+  ]
+}
