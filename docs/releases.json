@@ -14,7 +14,7 @@
           "audience": "product",
           "title": "Member profile photos",
           "description": "Upload a photo or generate an initials avatar from the member profile page (JPEG/PNG/WebP/GIF, max 500KB).",
-          "docHref": "/docs/whats-new#v0-2-0"
+          "docHref": "/docs/updates#v0-2-0"
         },
         {
           "type": "api",

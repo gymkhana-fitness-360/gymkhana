@@ -1,6 +1,6 @@
 # Release workflow
 
-Single source of truth for version history across GitHub, the developers portal, and Mintlify operator docs.
+Single source of truth for version history across GitHub, the developers portal, and operator docs at `/docs/updates`.
 
 ## Repositories
 
@@ -10,7 +10,7 @@ Single source of truth for version history across GitHub, the developers portal,
 | **Changelog (human prose)** | [`CHANGELOG.md`](../CHANGELOG.md) |
 | **Structured manifest** | [`docs/releases.json`](releases.json) |
 | **Developers portal** | gymkhana-cloud `src/data/releases/releases.ts` (synced) |
-| **Operator what's new** | gymkhana-cloud `product-docs/whats-new.mdx` (synced) |
+| **Operator what's new** | gymkhana-cloud `/docs/updates` (synced via `npm run sync:releases`) |
 
 ## Cut a release
 
@@ -36,7 +36,7 @@ cd cloud
 npm run sync:releases
 ```
 
-Commit the updated `releases.ts` and `product-docs/whats-new.mdx`.
+Commit the updated `releases.ts` in cloud (renders on `/docs/updates`).
 
 ## Validation scripts
 
