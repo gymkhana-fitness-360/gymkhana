@@ -27,6 +27,8 @@ import {
   DashboardQuickEntryPanel,
 } from "@/components/dashboard/dashboard-quick-entry";
 
+const logger = createLogger("dashboard-payments");
+
 interface Payment {
   id: string;
   amount: string;
@@ -209,7 +211,7 @@ export default function PaymentsPage() {
   params.append("includeStats", "false");
   const paymentsUrl = `/api/payments?${params}`;
 
-  const { data, isLoading, error, mutate: fetchPayments } = useSWR(paymentsUrl, swrFetcher, {
+  const { data, isLoading, error, mutate: fetchPayments } = useSWR<any>(paymentsUrl, swrFetcher, {
     revalidateOnMount: true,
   });
 
