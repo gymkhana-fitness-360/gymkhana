@@ -21,7 +21,7 @@
   },
   "scripts": {
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && next build",
+    "vercel-build": "prisma generate && (tsc --noEmit --pretty false 2>&1 | grep -E 'error TS' | head -300 || true); echo TSC_DONE; next build",
     "dev": "next dev --webpack",
     "dev:turbo": "next dev",
     "dev:skip-check": "next dev --webpack",
